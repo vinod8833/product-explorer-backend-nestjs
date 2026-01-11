@@ -1,0 +1,132 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: product-explorer-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-product_explorer}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - product-explorer-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-product_explorer}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: product-explorer-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - product-explorer-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: product-explorer-backend-dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-3001}
+      API_PREFIX: ${API_PREFIX:-api}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      DATABASE_URL: postgresql://${DB_USERNAME:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-product_explorer}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-product_explorer}
+      REDIS_URL: redis://redis:6379
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SCRAPING_DELAY_MIN: ${SCRAPING_DELAY_MIN:-1000}
+      SCRAPING_DELAY_MAX: ${SCRAPING_DELAY_MAX:-3000}
+      SCRAPING_CONCURRENT_LIMIT: ${SCRAPING_CONCURRENT_LIMIT:-3}
+      SCRAPING_RETRY_ATTEMPTS: ${SCRAPING_RETRY_ATTEMPTS:-3}
+      WOB_BASE_URL: ${WOB_BASE_URL:-https://www.worldofbooks.com}
+      WOB_USER_AGENT: ${WOB_USER_AGENT:-Mozilla/5.0 (compatible; ProductExplorer/1.0)}
+      CACHE_TTL_NAVIGATION: ${CACHE_TTL_NAVIGATION:-3600}
+      CACHE_TTL_CATEGORY: ${CACHE_TTL_CATEGORY:-1800}
+      CACHE_TTL_PRODUCT: ${CACHE_TTL_PRODUCT:-900}
+      CACHE_TTL_PRODUCT_DETAIL: ${CACHE_TTL_PRODUCT_DETAIL:-600}
+    ports:
+      - "${PORT:-3001}:3001"
+    networks:
+      - product-explorer-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+
+  backend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: product-explorer-backend-prod
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3001}
+      API_PREFIX: ${API_PREFIX:-api}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      DATABASE_URL: postgresql://${DB_USERNAME:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-product_explorer}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-product_explorer}
+      REDIS_URL: redis://redis:6379
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SCRAPING_DELAY_MIN: ${SCRAPING_DELAY_MIN:-1000}
+      SCRAPING_DELAY_MAX: ${SCRAPING_DELAY_MAX:-3000}
+      SCRAPING_CONCURRENT_LIMIT: ${SCRAPING_CONCURRENT_LIMIT:-3}
+      SCRAPING_RETRY_ATTEMPTS: ${SCRAPING_RETRY_ATTEMPTS:-3}
+      WOB_BASE_URL: ${WOB_BASE_URL:-https://www.worldofbooks.com}
+      WOB_USER_AGENT: ${WOB_USER_AGENT:-Mozilla/5.0 (compatible; ProductExplorer/1.0)}
+      CACHE_TTL_NAVIGATION: ${CACHE_TTL_NAVIGATION:-3600}
+      CACHE_TTL_CATEGORY: ${CACHE_TTL_CATEGORY:-1800}
+      CACHE_TTL_PRODUCT: ${CACHE_TTL_PRODUCT:-900}
+      CACHE_TTL_PRODUCT_DETAIL: ${CACHE_TTL_PRODUCT_DETAIL:-600}
+    ports:
+      - "${PORT:-3001}:3001"
+    networks:
+      - product-explorer-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - prod
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  product-explorer-network:
+    driver: bridge

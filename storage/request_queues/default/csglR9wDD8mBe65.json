@@ -1,0 +1,9 @@
+{
+	"id": "csglR9wDD8mBe65",
+	"json": "{\"id\":\"csglR9wDD8mBe65\",\"url\":\"https://www.worldofbooks.com/en-gb/category/fiction\",\"loadedUrl\":\"https://www.worldofbooks.com/en-gb/category/fiction\",\"uniqueKey\":\"https://www.worldofbooks.com/en-gb/category/fiction\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":3,\"errorMessages\":[\"Error: requestHandler timed out after 30 seconds.\\n    at Timeout._onTimeout (/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74)\\n    at listOnTimeout (node:internal/timers:581:17)\\n    at process.processTimers (node:internal/timers:519:7)\",\"Error: requestHandler timed out after 30 seconds.\\n    at Timeout._onTimeout (/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74)\\n    at listOnTimeout (node:internal/timers:581:17)\\n    at process.processTimers (node:internal/timers:519:7)\",\"Error: requestHandler timed out after 30 seconds.\\n    at Timeout._onTimeout (/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74)\\n    at listOnTimeout (node:internal/timers:581:17)\\n    at process.processTimers (node:internal/timers:519:7)\",\"Error: requestHandler timed out after 30 seconds.\\n    at Timeout._onTimeout (/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74)\\n    at listOnTimeout (node:internal/timers:581:17)\\n    at process.processTimers (node:internal/timers:519:7)\"],\"headers\":{},\"userData\":{\"depth\":0,\"__crawlee\":{\"state\":5}},\"handledAt\":\"2026-01-07T11:17:14.983Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 3,
+	"uniqueKey": "https://www.worldofbooks.com/en-gb/category/fiction",
+	"url": "https://www.worldofbooks.com/en-gb/category/fiction"
+}

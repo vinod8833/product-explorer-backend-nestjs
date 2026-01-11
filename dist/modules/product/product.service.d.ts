@@ -1,0 +1,36 @@
+import { Repository } from 'typeorm';
+import { Product } from '../../database/entities/product.entity';
+import { ProductDetail } from '../../database/entities/product-detail.entity';
+import { Review } from '../../database/entities/review.entity';
+import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/product.dto';
+import { PaginationDto, PaginatedResponseDto } from '../../common/dto/pagination.dto';
+export declare class ProductService {
+    private productRepository;
+    private productDetailRepository;
+    private reviewRepository;
+    constructor(productRepository: Repository<Product>, productDetailRepository: Repository<ProductDetail>, reviewRepository: Repository<Review>);
+    findAll(paginationDto: PaginationDto, searchDto?: ProductQueryDto): Promise<PaginatedResponseDto<Product>>;
+    findByCategory(categoryId: number, paginationDto: PaginationDto, searchDto?: ProductQueryDto): Promise<PaginatedResponseDto<Product>>;
+    findOne(id: number): Promise<Product>;
+    findBySourceId(sourceId: string): Promise<Product>;
+    create(createProductDto: CreateProductDto): Promise<Product>;
+    update(id: number, updateProductDto: UpdateProductDto): Promise<Product>;
+    remove(id: number): Promise<void>;
+    upsertBySourceId(sourceId: string, data: Partial<Product>): Promise<Product>;
+    createOrUpdateDetail(productId: number, detailData: Partial<ProductDetail>): Promise<ProductDetail>;
+    addReview(productId: number, reviewData: Partial<Review>): Promise<Review>;
+    search(query: string, paginationDto: PaginationDto): Promise<PaginatedResponseDto<Product>>;
+    private buildSearchQuery;
+    queueProductRefresh(id: number): Promise<string>;
+    getSearchAnalytics(days?: number): Promise<any>;
+    createProduct(createProductDto: CreateProductDto): Promise<Product>;
+    updateProduct(id: number, updateProductDto: UpdateProductDto): Promise<Product>;
+    deleteProduct(id: number): Promise<void>;
+    getProductById(id: number, includes?: string[]): Promise<Product | null>;
+    trackView(id: number): Promise<void>;
+    searchProducts(query: string, options?: any): Promise<PaginatedResponseDto<Product>>;
+    getFacets(query: string): Promise<any>;
+    getSearchSuggestions(query: string, limit?: number): Promise<string[]>;
+    getPopularProducts(limit?: number, timeframe?: string): Promise<Product[]>;
+    getRecommendations(productId: number, limit?: number): Promise<Product[]>;
+}

@@ -1,0 +1,9 @@
+services:
+  backend-dev:
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/dist
+    environment:
+      NODE_ENV: development
+      DEBUG: "*"

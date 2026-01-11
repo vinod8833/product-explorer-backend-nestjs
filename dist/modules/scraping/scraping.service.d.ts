@@ -1,0 +1,34 @@
+import { Repository } from 'typeorm';
+import { Queue } from 'bull';
+import { ScrapeJob, ScrapeJobStatus } from '../../database/entities/scrape-job.entity';
+import { Navigation } from '../../database/entities/navigation.entity';
+import { Category } from '../../database/entities/category.entity';
+import { Product } from '../../database/entities/product.entity';
+import { ProductDetail } from '../../database/entities/product-detail.entity';
+import { Review } from '../../database/entities/review.entity';
+import { CreateScrapeJobDto, ScrapeStatsDto } from './dto/scraping.dto';
+import { PaginationDto, PaginatedResponseDto } from '../../common/dto/pagination.dto';
+export declare class ScrapingService {
+    private scrapeJobRepository;
+    private navigationRepository;
+    private categoryRepository;
+    private productRepository;
+    private productDetailRepository;
+    private reviewRepository;
+    private scrapingQueue;
+    private readonly logger;
+    constructor(scrapeJobRepository: Repository<ScrapeJob>, navigationRepository: Repository<Navigation>, categoryRepository: Repository<Category>, productRepository: Repository<Product>, productDetailRepository: Repository<ProductDetail>, reviewRepository: Repository<Review>, scrapingQueue: Queue);
+    createScrapeJob(createScrapeJobDto: CreateScrapeJobDto): Promise<ScrapeJob>;
+    findAllJobs(paginationDto: PaginationDto): Promise<PaginatedResponseDto<ScrapeJob>>;
+    findJobById(id: number): Promise<ScrapeJob>;
+    updateJobStatus(id: number, status: ScrapeJobStatus, errorLog?: string, itemsScraped?: number): Promise<ScrapeJob>;
+    getStats(): Promise<ScrapeStatsDto>;
+    triggerNavigationScrape(baseUrl: string): Promise<ScrapeJob>;
+    triggerCategoryScrape(categoryUrl: string, navigationId?: number, parentId?: number): Promise<ScrapeJob>;
+    triggerProductListScrape(productListUrl: string, categoryId?: number, maxPages?: number): Promise<ScrapeJob>;
+    triggerProductDetailScrape(productUrl: string, productId?: number): Promise<ScrapeJob>;
+    saveNavigationItems(items: any[]): Promise<Navigation[]>;
+    saveCategoryItems(items: any[], navigationId?: number, parentId?: number): Promise<Category[]>;
+    saveProductItems(items: any[], categoryId?: number): Promise<Product[]>;
+    saveProductDetail(item: any, productId?: number): Promise<Product>;
+}
