@@ -1,6 +1,6 @@
 {
-  "usableSessionsCount": 11,
-  "retiredSessionsCount": 0,
+  "usableSessionsCount": 12,
+  "retiredSessionsCount": 2,
   "sessions": [
     {
       "id": "session_LBQ2bmRHEl",
@@ -198,9 +198,9 @@
       "errorScoreDecrement": 0.5,
       "expiresAt": "2026-01-12T15:55:42.524Z",
       "createdAt": "2026-01-12T15:05:42.524Z",
-      "usageCount": 2,
+      "usageCount": 6,
       "maxUsageCount": 50,
-      "errorScore": 2
+      "errorScore": 10
     },
     {
       "id": "session_Ng0TssFdE9",
@@ -218,6 +218,66 @@
       "errorScoreDecrement": 0.5,
       "expiresAt": "2026-01-12T15:56:13.566Z",
       "createdAt": "2026-01-12T15:06:13.566Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_7n5AfGGzKr",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:56:44.012Z",
+      "createdAt": "2026-01-12T15:06:44.012Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_Hxz8T74x0Y",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:56:44.022Z",
+      "createdAt": "2026-01-12T15:06:44.022Z",
+      "usageCount": 6,
+      "maxUsageCount": 50,
+      "errorScore": 10
+    },
+    {
+      "id": "session_Rw0XBTadXS",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:57:14.940Z",
+      "createdAt": "2026-01-12T15:07:14.940Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
