@@ -62,8 +62,10 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
-# Copy the railway server
+# Copy the railway server and deployment script
 COPY railway-server.js ./railway-server.js
+COPY railway-deploy.sh ./railway-deploy.sh
+RUN chmod +x railway-deploy.sh
 
 # Set Playwright environment variables and DATABASE_URL
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
@@ -83,5 +85,5 @@ EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
 
-# Start the railway server with scraping integration
-CMD ["node", "railway-server.js"]
+# Start the railway server with environment setup
+CMD ["./railway-deploy.sh"]
