@@ -1,9 +1,9 @@
 {
-  "usableSessionsCount": 5,
-  "retiredSessionsCount": 1,
+  "usableSessionsCount": 11,
+  "retiredSessionsCount": 0,
   "sessions": [
     {
-      "id": "session_lfF9Cyf4YB",
+      "id": "session_LBQ2bmRHEl",
       "cookieJar": {
         "version": "tough-cookie@6.0.0",
         "storeType": "MemoryCookieStore",
@@ -16,186 +16,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:07:25.598Z",
-      "createdAt": "2026-01-12T11:17:25.598Z",
+      "expiresAt": "2026-01-12T15:51:16.014Z",
+      "createdAt": "2026-01-12T15:01:16.014Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_8B8SK4uXSu",
-      "cookieJar": {
-        "version": "tough-cookie@6.0.0",
-        "storeType": "MemoryCookieStore",
-        "rejectPublicSuffixes": true,
-        "enableLooseMode": false,
-        "allowSpecialUseDomain": true,
-        "prefixSecurity": "silent",
-        "cookies": [
-          {
-            "key": "_shopify_y",
-            "value": "3025c727-877c-4710-bf4f-3c97a1acbcbe",
-            "expires": "2027-01-12T17:19:00.173Z",
-            "domain": "worldofbooks.com",
-            "path": "/",
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.324Z",
-            "lastAccessed": "2026-01-12T11:19:01.676Z"
-          },
-          {
-            "key": "_shopify_s",
-            "value": "ced1d111-d072-4de2-b8f9-fb47e359cedd",
-            "expires": "2026-01-12T11:49:00.173Z",
-            "domain": "worldofbooks.com",
-            "path": "/",
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.356Z",
-            "lastAccessed": "2026-01-12T11:19:01.676Z"
-          },
-          {
-            "key": "_shopify_analytics",
-            "value": ":AZux7ONdAAEA0vMLefkDWH_dLkTadbkGBL8OQagyJd41p-A4Tx44LI3lgRluHfPpFa0zQ7CkgkJMj_z3o6CIll9MiG80ouTIuUWL:",
-            "expires": "2027-01-12T11:17:30.720Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "httpOnly": true,
-            "hostOnly": true,
-            "creation": "2026-01-12T11:17:45.359Z",
-            "lastAccessed": "2026-01-12T11:19:01.686Z"
-          },
-          {
-            "key": "cart_currency",
-            "value": "USD",
-            "expires": "2026-01-26T11:19:00.170Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "hostOnly": true,
-            "creation": "2026-01-12T11:17:45.366Z",
-            "lastAccessed": "2026-01-12T11:19:01.686Z"
-          },
-          {
-            "key": "__eventn_id",
-            "value": "dt4ndjl9ii.1768216652",
-            "expires": "2027-02-16T11:18:59.457Z",
-            "domain": "worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.366Z",
-            "lastAccessed": "2026-01-12T11:19:01.686Z"
-          },
-          {
-            "key": "swym-session-id",
-            "value": "\"zoug41b852duby74m7u0rgi2cqulke95uscvvna7i4qkw44ponpaa56wg55d1v9i\"",
-            "expires": "2026-01-12T11:49:01.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.367Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "swym-pid",
-            "value": "\"rTqgRVolwLgMEf6yEmnpwLNUailSACsmlQlC0eL5Bfw=\"",
-            "expires": "2027-01-12T11:18:59.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.367Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "OptanonConsent",
-            "value": "isGpcEnabled=0&datestamp=Mon+Jan+12+2026+16%3A49%3A01+GMT%2B0530+(India+Standard+Time)&version=202506.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&consentId=39074b90-8bd5-45f0-819d-f46e1685793b&interactionCount=0&isAnonUser=1&landingPath=https%3A%2F%2Fwww.worldofbooks.com%2Fen-gb%2Fcategory%2Ffiction&groups=C0003%3A0%2CC0004%3A0%2CC0002%3A0%2CC0001%3A1",
-            "expires": "2027-01-12T11:19:01.000Z",
-            "domain": "worldofbooks.com",
-            "path": "/",
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.367Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "swym-v-ckd",
-            "value": "1",
-            "expires": "2026-01-12T11:47:43.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.368Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "swym-swymRegid",
-            "value": "\"17upUAozdss-j7kglsRb3G5lEtKNi_zD831N-5lKMGzm5ZP3PQ82OwMrASSNU2fjk6XxiaVl0MiyTVThR4rqXWbJIMOC-Q8fxdFvv-s1ySeVqkTjRc3HjDdBmmDIFo9PRnd9-KY1I1IwJ0-_uL6wLKcXlduFVhW9DwKNZ1QcErI\"",
-            "expires": "2027-01-12T11:19:00.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.368Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "swym-email",
-            "value": "null",
-            "expires": "2027-01-12T11:19:00.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:17:45.369Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "cart",
-            "value": "hWN7WIc6DmFLiUjAxxVDFrpU%3Fkey%3Df379ef71aa9b9cd1531b30f85098d331",
-            "expires": "2026-02-12T11:17:43.261Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "hostOnly": true,
-            "creation": "2026-01-12T11:17:45.369Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "_shopify_essential",
-            "value": ":AZux7ODEAAEA2yau7b18ha8gYSF_KeiHzaV3l4snS9gfscbHAiywAOeG2Lfrh0JikZHXh0PueTf3SzQv4OHBVywpZURJZgMkUUo12SHI9QGKpWI7jG_b5Z7x72mMi9tUQYA5G_ui0BZ-W8LVPrrX-eHEqmuaFMz-j2VaAOBr2nnE3PO_7sAdu7de1ESwifv5auoPijMADuZiv_CmyKPIYeiGcMtuqdgK7PWYHEAJEGuNTaKnEW8gY8T3msAG5fE6CN_PpJ3wAPwbHz4za7_d00XlJqvzaq-q6n8KvBVy71_d8lKNJkFplWHx3AYb48970gjMUWufbIEaKatyrNQCMx6mhwzm4XLCeAi-nNFlvbZYD_LfnDcWuTf6mbf1pziHRO5eJOyL5fJ7PwuBhMHsvPIJ:",
-            "expires": "2027-01-12T11:17:43.261Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "httpOnly": true,
-            "hostOnly": true,
-            "creation": "2026-01-12T11:17:45.370Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          },
-          {
-            "key": "swym-o_s",
-            "value": "{\"mktenabled\":false}",
-            "expires": "2026-01-12T11:49:00.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:18:24.942Z",
-            "lastAccessed": "2026-01-12T11:19:01.687Z"
-          }
-        ]
-      },
-      "userData": {},
-      "maxErrorScore": 3,
-      "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:07:25.625Z",
-      "createdAt": "2026-01-12T11:17:25.625Z",
-      "usageCount": 4,
-      "maxUsageCount": 50,
-      "errorScore": 6
-    },
-    {
-      "id": "session_vcRljWHjqr",
+      "id": "session_U3F7BPGbMk",
       "cookieJar": {
         "version": "tough-cookie@6.0.0",
         "storeType": "MemoryCookieStore",
@@ -208,14 +36,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:08:15.760Z",
-      "createdAt": "2026-01-12T11:18:15.760Z",
+      "expiresAt": "2026-01-12T15:51:49.140Z",
+      "createdAt": "2026-01-12T15:01:49.140Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_sdssylubvi",
+      "id": "session_jwPTa8tpQS",
       "cookieJar": {
         "version": "tough-cookie@6.0.0",
         "storeType": "MemoryCookieStore",
@@ -228,14 +56,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:08:55.076Z",
-      "createdAt": "2026-01-12T11:18:55.076Z",
+      "expiresAt": "2026-01-12T15:52:19.844Z",
+      "createdAt": "2026-01-12T15:02:19.844Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_j4CEJSyXkW",
+      "id": "session_dO4tF5Lwph",
       "cookieJar": {
         "version": "tough-cookie@6.0.0",
         "storeType": "MemoryCookieStore",
@@ -248,14 +76,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:09:31.968Z",
-      "createdAt": "2026-01-12T11:19:31.968Z",
+      "expiresAt": "2026-01-12T15:52:50.437Z",
+      "createdAt": "2026-01-12T15:02:50.437Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_ZjQcd1Nh9o",
+      "id": "session_VVW2vByRga",
       "cookieJar": {
         "version": "tough-cookie@6.0.0",
         "storeType": "MemoryCookieStore",
@@ -263,115 +91,136 @@
         "enableLooseMode": false,
         "allowSpecialUseDomain": true,
         "prefixSecurity": "silent",
-        "cookies": [
-          {
-            "key": "cart_currency",
-            "value": "USD",
-            "expires": "2026-01-26T11:19:43.263Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "hostOnly": true,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "swym-session-id",
-            "value": "\"zacjwevq90p0jm2jd9v1x06rc9okw19egmpfhypakdhah52p7hnjl5g12eupgdgr\"",
-            "expires": "2026-01-12T11:49:50.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "swym-pid",
-            "value": "\"rTqgRVolwLgMEf6yEmnpwLNUailSACsmlQlC0eL5Bfw=\"",
-            "expires": "2027-01-12T11:19:38.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "__eventn_id",
-            "value": "paadnhxjks.1768216774",
-            "expires": "2027-02-16T11:19:38.827Z",
-            "domain": "worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "swym-v-ckd",
-            "value": "1",
-            "expires": "2026-01-12T11:49:39.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "swym-swymRegid",
-            "value": "\"XyNN2FnvaTGpbzDWtfmExdb76vPFrRxVN7sr7rBIJTPr_xBmq6PTnBydKXSc8YBG4Ikw4_MOo8oZ8DKZnvSw2TVvoGGMoWYxvPgtp_HsXCsKgNPkaWOO-V-hUQRWlzaIloNhJ1HTIMsFxS6JynhZNbIzp9tbmIna3nkOOaI6N8Y\"",
-            "expires": "2027-01-12T11:19:40.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "swym-email",
-            "value": "null",
-            "expires": "2027-01-12T11:19:39.000Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "cart",
-            "value": "hWN7WIoMmtWOhYEAGGrgqE1k%3Fkey%3D49aafdb7fffb5d0956689c7d06d11a10",
-            "expires": "2026-02-12T11:19:41.967Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "hostOnly": true,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          },
-          {
-            "key": "_shopify_essential",
-            "value": ":AZux7sRIAAEAUg2upfzVkIXvDBwlDGtkWQZdmU4E4LRKnCGeClcdJfaIFiTFtAr7TWlItjFA1pkAryDeU3PAW4jkY2kDHHVQ1pFn6UnUC5jakjI5YMDUIhtEAVo35E0c-GUaZvKx8GbVsG5MigpsiEkdGdcJ4uhMxRJfZgAH_rujNr8qJE5KqAco9re8B91G2YGG79muKmTnmdf4raFPbyjH7W9uR463fB0wkUrAQhWnARa43HBLfWUeBL9NeirhHuZ_CfntTBPrcjx4RuG_NVBm3CbyRYeuyOGZmuoW_Q_RMPb-TC7hoj7XJRkJGceL825cQZfiBY1jJDj8HlQ-j3vBDywViasGVtPhMlA43LmWuXo1uRawZI6tibR2WBlxV0QGJc4u259AgmERpWKCtmCuDHSik1h8TDW2LMeNquCJwi1_eZAZgg:",
-            "expires": "2027-01-12T11:19:49.651Z",
-            "domain": "www.worldofbooks.com",
-            "path": "/",
-            "secure": true,
-            "httpOnly": true,
-            "hostOnly": true,
-            "creation": "2026-01-12T11:19:50.959Z",
-            "lastAccessed": "2026-01-12T11:19:50.959Z"
-          }
-        ]
+        "cookies": []
       },
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-01-12T12:09:31.981Z",
-      "createdAt": "2026-01-12T11:19:31.981Z",
-      "usageCount": 1,
+      "expiresAt": "2026-01-12T15:53:21.839Z",
+      "createdAt": "2026-01-12T15:03:21.839Z",
+      "usageCount": 0,
       "maxUsageCount": 50,
-      "errorScore": 1
+      "errorScore": 0
+    },
+    {
+      "id": "session_CqNf0dLwSL",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:53:52.728Z",
+      "createdAt": "2026-01-12T15:03:52.728Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_5aqkurG9cJ",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:54:32.585Z",
+      "createdAt": "2026-01-12T15:04:32.585Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_GrEDJQi6T8",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:55:03.004Z",
+      "createdAt": "2026-01-12T15:05:03.004Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_Fjpbj322nm",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:55:42.517Z",
+      "createdAt": "2026-01-12T15:05:42.517Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_S3LqFEnHNu",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:55:42.524Z",
+      "createdAt": "2026-01-12T15:05:42.524Z",
+      "usageCount": 2,
+      "maxUsageCount": 50,
+      "errorScore": 2
+    },
+    {
+      "id": "session_Ng0TssFdE9",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-12T15:56:13.566Z",
+      "createdAt": "2026-01-12T15:06:13.566Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
     }
   ]
 }

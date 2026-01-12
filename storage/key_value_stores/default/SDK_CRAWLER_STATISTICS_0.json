@@ -6,13 +6,13 @@
   "requestsFinishedPerMinute": 0,
   "requestMinDurationMillis": null,
   "requestMaxDurationMillis": 0,
-  "requestTotalFailedDurationMillis": 49004,
+  "requestTotalFailedDurationMillis": 30112,
   "requestTotalFinishedDurationMillis": 0,
-  "crawlerStartedAt": "2026-01-12T11:17:25.384Z",
-  "crawlerFinishedAt": "2026-01-12T11:20:21.488Z",
-  "statsPersistedAt": "2026-01-12T11:20:21.488Z",
-  "crawlerRuntimeMillis": 177524,
-  "crawlerLastStartTimestamp": 1768216643964,
+  "crawlerStartedAt": "2026-01-12T15:01:15.848Z",
+  "crawlerFinishedAt": "2026-01-12T15:03:20.731Z",
+  "statsPersistedAt": "2026-01-12T15:03:20.731Z",
+  "crawlerRuntimeMillis": 125705,
+  "crawlerLastStartTimestamp": 1768230075026,
   "requestRetryHistogram": [
     null,
     null,
@@ -20,18 +20,16 @@
     1
   ],
   "statsId": 0,
-  "requestAvgFailedDurationMillis": 49004,
+  "requestAvgFailedDurationMillis": 30112,
   "requestAvgFinishedDurationMillis": null,
-  "requestTotalDurationMillis": 49004,
+  "requestTotalDurationMillis": 30112,
   "requestsTotal": 1,
-  "requestsWithStatusCode": {
-    "404": 4
-  },
+  "requestsWithStatusCode": {},
   "errors": {
-    "/home/vinod/product-explorer-backend-nestjs/node_modules/@apify/src/index.ts:88:74": {
+    "/home/vinod/product-explorer-backend-nestjs/node_modules/@crawlee/src/crawlers/crawler_utils.ts:13:11": {
       "missing error code": {
         "Error": {
-          "requestHandler timed out after 30 seconds.": {
+          "Navigation timed out after 30 seconds.": {
             "count": 1
           }
         }
@@ -39,10 +37,10 @@
     }
   },
   "retryErrors": {
-    "/home/vinod/product-explorer-backend-nestjs/node_modules/@apify/src/index.ts:88:74": {
+    "/home/vinod/product-explorer-backend-nestjs/node_modules/@crawlee/src/crawlers/crawler_utils.ts:13:11": {
       "missing error code": {
         "Error": {
-          "requestHandler timed out after 30 seconds.": {
+          "Navigation timed out after 30 seconds.": {
             "count": 3
           }
         }

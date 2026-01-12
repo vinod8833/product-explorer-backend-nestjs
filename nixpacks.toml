@@ -2,10 +2,10 @@
 nixPkgs = ['nodejs_20']
 
 [phases.install]
-cmds = ['npm ci', 'cd backend && npm ci']
+cmds = ['npm ci']
 
 [phases.build]
-cmds = ['cd backend && npm run build']
+cmds = ['echo "Skipping build for Railway server"']
 
 [start]
-cmd = 'cd backend && npm run start:prod'
+cmd = 'node src/railway-server.js'
