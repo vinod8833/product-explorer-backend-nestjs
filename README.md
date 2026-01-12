@@ -259,32 +259,49 @@ make status             # Detailed service status
 
 ### Railway Deployment
 
-Your backend is configured for Railway deployment with multiple fallback mechanisms:
+Your backend is configured for Railway deployment with a robust fallback system:
 
-```bash
-# The deployment will try these methods in order:
-1. src/railway-server.js (main server)
-2. railway-server.js (fallback)
-3. npm run start:railway (package.json script)
-```
+**Deployment Strategy:**
+- Primary: Uses `railway-server.js` in the root directory
+- Fallback: Attempts to load `src/railway-server.js` if available
+- Graceful degradation: Provides basic API even without full NestJS stack
 
-**Deployment files:**
+**Key Features:**
+- ✅ Health check endpoint (`/health`)
+- ✅ Basic API information (`/`)
+- ✅ Product count endpoint (`/api/products`)
+- ✅ Database connectivity testing
+- ✅ Comprehensive error handling
+- ✅ CORS support for frontend integration
+
+**Deployment Files:**
 - `railway.toml` - Railway configuration
 - `nixpacks.toml` - Build configuration  
-- `start-railway.sh` - Startup script with fallbacks
-- `src/railway-server.js` - Main Railway server
-- `railway-server.js` - Fallback server
+- `railway-server.js` - Main Railway server with fallbacks
+- `src/railway-server.js` - Full NestJS server (if available)
 
-**To deploy:**
+**To Deploy:**
 1. Push your changes to GitHub
-2. Railway will automatically deploy
-3. Check logs for startup process
-4. Visit your Railway URL
+2. Railway will automatically deploy using `node railway-server.js`
+3. Check Railway logs for deployment status
+4. Visit your Railway URL to test endpoints
 
-**If deployment fails:**
-- Check Railway logs for specific errors
-- Ensure all environment variables are set
-- Verify the startup script has execute permissions
+**Available Endpoints on Railway:**
+- `GET /` - API information and local setup instructions
+- `GET /health` - Health check with database status
+- `GET /api/products` - Product count and information
+- `GET /api/*` - API endpoint information
+
+### Local Development (Full Features)
+
+For complete functionality including scraping and full API:
+
+```bash
+git clone git@github.com:vinod8833/product-explorer-backend-nestjs.git
+cd product-explorer-backend-nestjs
+make setup
+make scrape-data
+```
 
 ### Manual Production Setup
 

@@ -1,68 +1,279 @@
-// Railway deployment fallback server
-// This file serves as a fallback if the src/railway-server.js path doesn't work
+// Railway deployment server with automatic path resolution
+// This file handles Railway deployment with multiple fallback strategies
 
-console.log('🚀 Starting Railway Fallback Server...');
-console.log('Attempting to load main railway server...');
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
 
-try {
-  // Try to load the main railway server
-  require('./src/railway-server.js');
-} catch (error) {
-  console.error('❌ Failed to load main railway server:', error.message);
-  console.log('🔄 Starting minimal fallback server...');
-  
-  // Minimal fallback server
-  const http = require('http');
-  const port = process.env.PORT || 3001;
-  const host = '0.0.0.0';
-  
-  const server = http.createServer((req, res) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Content-Type', 'application/json');
-    
-    if (req.method === 'OPTIONS') {
-      res.writeHead(200);
-      res.end();
-      return;
+console.log('🚀 Starting Railway Production Server...');
+console.log('Working directory:', process.cwd());
+console.log('Node.js version:', process.version);
+console.log('Environment:', process.env.NODE_ENV);
+
+// Try to load the main railway server first
+const mainServerPath = path.join(__dirname, 'src', 'railway-server.js');
+console.log('Looking for main server at:', mainServerPath);
+
+if (fs.existsSync(mainServerPath)) {
+  console.log('✅ Found main railway server, loading...');
+  try {
+    require(mainServerPath);
+    return; // Exit if main server loads successfully
+  } catch (error) {
+    console.error('❌ Failed to load main railway server:', error.message);
+    console.log('🔄 Falling back to minimal server...');
+  }
+} else {
+  console.log('⚠️ Main railway server not found, using fallback...');
+}
+
+// Fallback minimal server
+const port = process.env.PORT || 3001;
+const host = '0.0.0.0';
+
+console.log('🔄 Starting minimal fallback server...');
+console.log('Port:', port);
+console.log('Host:', host);
+
+// Check for database connectivity
+async function testDatabase() {
+  if (!process.env.DATABASE_URL) {
+    console.log('⚠️ No DATABASE_URL provided');
+    return false;
+  }
+
+  try {
+    // Try to require pg, handle if not available
+    let Client;
+    try {
+      Client = require('pg').Client;
+    } catch (pgError) {
+      console.log('⚠️ PostgreSQL client not available:', pgError.message);
+      return false;
     }
+
+    const client = new Client({ 
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
+    await client.connect();
+    console.log('✅ Database connection successful');
     
+    // Test basic query
+    const result = await client.query('SELECT NOW()');
+    console.log('📊 Database time:', result.rows[0].now);
+    
+    await client.end();
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    return false;
+  }
+}
+
+async function getProductCount() {
+  if (!process.env.DATABASE_URL) return 0;
+  
+  try {
+    // Try to require pg, handle if not available
+    let Client;
+    try {
+      Client = require('pg').Client;
+    } catch (pgError) {
+      console.log('⚠️ PostgreSQL client not available for product count');
+      return 0;
+    }
+
+    const client = new Client({ 
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
+    await client.connect();
+    
+    const result = await client.query('SELECT COUNT(*) as count FROM products');
+    const count = parseInt(result.rows[0].count);
+    
+    await client.end();
+    return count;
+  } catch (error) {
+    console.error('Error getting product count:', error.message);
+    return 0;
+  }
+}
+
+const server = http.createServer(async (req, res) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Content-Type', 'application/json');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+  
+  try {
     if (req.url === '/health') {
+      const dbStatus = await testDatabase();
+      const productCount = await getProductCount();
+      
       res.writeHead(200);
       res.end(JSON.stringify({
         status: 'ok',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        message: 'Railway fallback server running',
-        environment: process.env.NODE_ENV || 'unknown'
+        port: port,
+        host: host,
+        environment: process.env.NODE_ENV || 'unknown',
+        database: dbStatus ? 'connected' : 'disconnected',
+        productCount: productCount,
+        server: 'Railway Deployment Server',
+        version: '1.0.0',
+        memory: {
+          used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB',
+          total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + ' MB',
+        }
       }, null, 2));
+      
     } else if (req.url === '/') {
+      const productCount = await getProductCount();
+      
       res.writeHead(200);
       res.end(JSON.stringify({
-        message: 'Product Data Explorer API - Railway Deployment',
-        status: 'Fallback server active',
+        message: 'Product Data Explorer API',
+        version: '1.0.0',
         timestamp: new Date().toISOString(),
-        note: 'This is a minimal fallback server. For full functionality, use local development.',
+        status: 'Railway deployment successful',
+        productCount: productCount,
+        endpoints: {
+          health: '/health',
+          api: '/api',
+          products: '/api/products',
+          docs: '/api/docs'
+        },
         repository: 'https://github.com/vinod8833/product-explorer-backend-nestjs',
-        localSetup: 'git clone && make setup && make scrape-data'
+        localDevelopment: {
+          clone: 'git clone git@github.com:vinod8833/product-explorer-backend-nestjs.git',
+          setup: 'make setup',
+          scrapeData: 'make scrape-data',
+          note: 'For full API functionality including scraping, use local development'
+        }
       }, null, 2));
+      
+    } else if (req.url === '/api/products') {
+      const productCount = await getProductCount();
+      
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        data: [],
+        total: productCount,
+        page: 1,
+        limit: 20,
+        totalPages: Math.ceil(productCount / 20),
+        message: productCount > 0 ? 
+          `Found ${productCount} products in database` : 
+          'No products found. Use local development to populate data with scraping.',
+        note: 'This is a simplified Railway deployment. For full API functionality, use local development.',
+        localSetup: {
+          repository: 'https://github.com/vinod8833/product-explorer-backend-nestjs',
+          quickStart: 'git clone && make setup && make scrape-data'
+        }
+      }, null, 2));
+      
+    } else if (req.url.startsWith('/api/scraping')) {
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        message: 'Scraping API endpoint',
+        path: req.url,
+        note: 'Scraping functionality requires the full NestJS application with local development.',
+        status: 'Use local development for scraping',
+        localSetup: {
+          clone: 'git clone git@github.com:vinod8833/product-explorer-backend-nestjs.git',
+          setup: 'make setup',
+          scrape: 'make scrape-data',
+          monitor: 'make scrape-status'
+        }
+      }, null, 2));
+      
+    } else if (req.url.startsWith('/api')) {
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        message: 'API endpoint',
+        path: req.url,
+        note: 'This endpoint requires the full NestJS application.',
+        status: 'Simplified Railway deployment',
+        availableEndpoints: [
+          '/health - Health check',
+          '/api/products - Product information',
+          '/api/scraping - Scraping information'
+        ],
+        fullApiAccess: {
+          repository: 'https://github.com/vinod8833/product-explorer-backend-nestjs',
+          localSetup: 'make setup && make scrape-data'
+        }
+      }, null, 2));
+      
     } else {
       res.writeHead(404);
       res.end(JSON.stringify({
         error: 'Not Found',
         path: req.url,
-        available: ['/', '/health']
+        available: ['/', '/health', '/api/products', '/api/scraping'],
+        message: 'This is a simplified Railway deployment. For full API functionality, use local development.'
       }, null, 2));
     }
+  } catch (error) {
+    console.error('Request error:', error);
+    res.writeHead(500);
+    res.end(JSON.stringify({
+      error: 'Internal Server Error',
+      message: error.message,
+      timestamp: new Date().toISOString(),
+      note: 'For full error handling and debugging, use local development environment.'
+    }, null, 2));
+  }
+});
+
+server.listen(port, host, () => {
+  console.log(`✅ Railway server running at http://${host}:${port}`);
+  console.log(`🏥 Health check: http://${host}:${port}/health`);
+  console.log(`🏠 Root: http://${host}:${port}/`);
+  console.log(`📦 Products: http://${host}:${port}/api/products`);
+  console.log('🚀 Railway deployment successful!');
+});
+
+server.on('error', (err) => {
+  console.error('❌ Server error:', err);
+  process.exit(1);
+});
+
+// Graceful shutdown handlers
+process.on('SIGTERM', () => {
+  console.log('📴 Received SIGTERM, shutting down gracefully');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
   });
-  
-  server.listen(port, host, () => {
-    console.log(`✅ Fallback server running at http://${host}:${port}`);
+});
+
+process.on('SIGINT', () => {
+  console.log('📴 Received SIGINT, shutting down gracefully');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
   });
-  
-  server.on('error', (err) => {
-    console.error('❌ Fallback server error:', err);
-    process.exit(1);
-  });
-}
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('💥 Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
