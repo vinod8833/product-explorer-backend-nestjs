@@ -259,38 +259,49 @@ make status             # Detailed service status
 
 ### Railway Deployment
 
-Your backend is configured for Railway deployment with a robust fallback system:
+Your backend is now configured for Railway deployment with a robust, Docker-based approach:
 
 **Deployment Strategy:**
-- Primary: Uses `railway-server.js` in the root directory
-- Fallback: Attempts to load `src/railway-server.js` if available
-- Graceful degradation: Provides basic API even without full NestJS stack
+- Uses `Dockerfile.railway` for optimized Railway deployment
+- Primary server: `railway-server.js` with comprehensive logging
+- Automatic fallback to `src/railway-server.js` if available
+- Enhanced health checks with longer startup time allowance
 
 **Key Features:**
-- ✅ Health check endpoint (`/health`)
+- ✅ Comprehensive startup logging for debugging
+- ✅ Health check endpoint (`/health`) with database connectivity test
 - ✅ Basic API information (`/`)
 - ✅ Product count endpoint (`/api/products`)
-- ✅ Database connectivity testing
-- ✅ Comprehensive error handling
+- ✅ Database connectivity testing (if DATABASE_URL provided)
+- ✅ Graceful error handling and fallbacks
 - ✅ CORS support for frontend integration
+- ✅ Non-root user security in Docker container
 
 **Deployment Files:**
-- `railway.toml` - Railway configuration
-- `nixpacks.toml` - Build configuration  
-- `railway-server.js` - Main Railway server with fallbacks
-- `src/railway-server.js` - Full NestJS server (if available)
+- `railway.toml` - Railway configuration (uses Dockerfile)
+- `Dockerfile.railway` - Optimized Railway Dockerfile
+- `railway-server.js` - Main Railway server with enhanced logging
+- `src/railway-server.js` - Full NestJS server (fallback)
 
 **To Deploy:**
 1. Push your changes to GitHub
-2. Railway will automatically deploy using `node railway-server.js`
-3. Check Railway logs for deployment status
-4. Visit your Railway URL to test endpoints
+2. Railway will automatically build using `Dockerfile.railway`
+3. Container will start with `node railway-server.js`
+4. Health checks will verify `/health` endpoint
+5. Visit your Railway URL to test endpoints
 
 **Available Endpoints on Railway:**
 - `GET /` - API information and local setup instructions
-- `GET /health` - Health check with database status
+- `GET /health` - Health check with database status and system info
 - `GET /api/products` - Product count and information
-- `GET /api/*` - API endpoint information
+- `GET /api/scraping` - Scraping information and local setup guide
+- `GET /api/*` - Generic API endpoint information
+
+**Debugging Railway Deployment:**
+- Check Railway logs for detailed startup information
+- Health checks now have 30s start period and 10s timeout
+- All requests are logged with timestamps and user agents
+- Database connection attempts are logged in detail
 
 ### Local Development (Full Features)
 

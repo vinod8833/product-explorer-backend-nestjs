@@ -9,15 +9,27 @@ console.log('🚀 Starting Railway Production Server...');
 console.log('Working directory:', process.cwd());
 console.log('Node.js version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);
+console.log('Port:', process.env.PORT || 3001);
+console.log('Host:', process.env.HOST || '0.0.0.0');
+
+// List files to debug
+console.log('Files in current directory:');
+try {
+  const files = fs.readdirSync('.');
+  files.slice(0, 10).forEach(file => console.log(`  - ${file}`));
+} catch (error) {
+  console.log('Could not list files:', error.message);
+}
 
 // Try to load the main railway server first
 const mainServerPath = path.join(__dirname, 'src', 'railway-server.js');
 console.log('Looking for main server at:', mainServerPath);
 
 if (fs.existsSync(mainServerPath)) {
-  console.log('✅ Found main railway server, loading...');
+  console.log('✅ Found main railway server, attempting to load...');
   try {
     require(mainServerPath);
+    console.log('✅ Main railway server loaded successfully');
     return; // Exit if main server loads successfully
   } catch (error) {
     console.error('❌ Failed to load main railway server:', error.message);
@@ -29,11 +41,10 @@ if (fs.existsSync(mainServerPath)) {
 
 // Fallback minimal server
 const port = process.env.PORT || 3001;
-const host = '0.0.0.0';
+const host = process.env.HOST || '0.0.0.0';
 
 console.log('🔄 Starting minimal fallback server...');
-console.log('Port:', port);
-console.log('Host:', host);
+console.log(`Server will listen on ${host}:${port}`);
 
 // Check for database connectivity
 async function testDatabase() {
@@ -56,6 +67,8 @@ async function testDatabase() {
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
     });
+    
+    console.log('🔌 Attempting database connection...');
     await client.connect();
     console.log('✅ Database connection successful');
     
@@ -102,7 +115,8 @@ async function getProductCount() {
 }
 
 const server = http.createServer(async (req, res) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  const timestamp = new Date().toISOString();
+  console.log(`${timestamp} - ${req.method} ${req.url} - ${req.headers['user-agent'] || 'Unknown'}`);
   
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -118,11 +132,11 @@ const server = http.createServer(async (req, res) => {
   
   try {
     if (req.url === '/health') {
+      console.log('🏥 Health check requested');
       const dbStatus = await testDatabase();
       const productCount = await getProductCount();
       
-      res.writeHead(200);
-      res.end(JSON.stringify({
+      const healthData = {
         status: 'ok',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
@@ -137,13 +151,17 @@ const server = http.createServer(async (req, res) => {
           used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB',
           total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + ' MB',
         }
-      }, null, 2));
+      };
+      
+      console.log('✅ Health check response:', JSON.stringify(healthData, null, 2));
+      res.writeHead(200);
+      res.end(JSON.stringify(healthData, null, 2));
       
     } else if (req.url === '/') {
+      console.log('🏠 Root endpoint requested');
       const productCount = await getProductCount();
       
-      res.writeHead(200);
-      res.end(JSON.stringify({
+      const rootData = {
         message: 'Product Data Explorer API',
         version: '1.0.0',
         timestamp: new Date().toISOString(),
@@ -162,13 +180,16 @@ const server = http.createServer(async (req, res) => {
           scrapeData: 'make scrape-data',
           note: 'For full API functionality including scraping, use local development'
         }
-      }, null, 2));
-      
-    } else if (req.url === '/api/products') {
-      const productCount = await getProductCount();
+      };
       
       res.writeHead(200);
-      res.end(JSON.stringify({
+      res.end(JSON.stringify(rootData, null, 2));
+      
+    } else if (req.url === '/api/products') {
+      console.log('📦 Products endpoint requested');
+      const productCount = await getProductCount();
+      
+      const productsData = {
         data: [],
         total: productCount,
         page: 1,
@@ -182,11 +203,14 @@ const server = http.createServer(async (req, res) => {
           repository: 'https://github.com/vinod8833/product-explorer-backend-nestjs',
           quickStart: 'git clone && make setup && make scrape-data'
         }
-      }, null, 2));
+      };
+      
+      res.writeHead(200);
+      res.end(JSON.stringify(productsData, null, 2));
       
     } else if (req.url.startsWith('/api/scraping')) {
-      res.writeHead(200);
-      res.end(JSON.stringify({
+      console.log('🕷️ Scraping endpoint requested');
+      const scrapingData = {
         message: 'Scraping API endpoint',
         path: req.url,
         note: 'Scraping functionality requires the full NestJS application with local development.',
@@ -197,11 +221,14 @@ const server = http.createServer(async (req, res) => {
           scrape: 'make scrape-data',
           monitor: 'make scrape-status'
         }
-      }, null, 2));
+      };
+      
+      res.writeHead(200);
+      res.end(JSON.stringify(scrapingData, null, 2));
       
     } else if (req.url.startsWith('/api')) {
-      res.writeHead(200);
-      res.end(JSON.stringify({
+      console.log('🔌 Generic API endpoint requested');
+      const apiData = {
         message: 'API endpoint',
         path: req.url,
         note: 'This endpoint requires the full NestJS application.',
@@ -215,39 +242,50 @@ const server = http.createServer(async (req, res) => {
           repository: 'https://github.com/vinod8833/product-explorer-backend-nestjs',
           localSetup: 'make setup && make scrape-data'
         }
-      }, null, 2));
+      };
+      
+      res.writeHead(200);
+      res.end(JSON.stringify(apiData, null, 2));
       
     } else {
-      res.writeHead(404);
-      res.end(JSON.stringify({
+      console.log('❓ Unknown endpoint requested:', req.url);
+      const notFoundData = {
         error: 'Not Found',
         path: req.url,
         available: ['/', '/health', '/api/products', '/api/scraping'],
         message: 'This is a simplified Railway deployment. For full API functionality, use local development.'
-      }, null, 2));
+      };
+      
+      res.writeHead(404);
+      res.end(JSON.stringify(notFoundData, null, 2));
     }
   } catch (error) {
-    console.error('Request error:', error);
-    res.writeHead(500);
-    res.end(JSON.stringify({
+    console.error('💥 Request error:', error);
+    const errorData = {
       error: 'Internal Server Error',
       message: error.message,
       timestamp: new Date().toISOString(),
       note: 'For full error handling and debugging, use local development environment.'
-    }, null, 2));
+    };
+    
+    res.writeHead(500);
+    res.end(JSON.stringify(errorData, null, 2));
   }
 });
 
+// Start the server
 server.listen(port, host, () => {
   console.log(`✅ Railway server running at http://${host}:${port}`);
   console.log(`🏥 Health check: http://${host}:${port}/health`);
   console.log(`🏠 Root: http://${host}:${port}/`);
   console.log(`📦 Products: http://${host}:${port}/api/products`);
   console.log('🚀 Railway deployment successful!');
+  console.log('📊 Server startup completed at:', new Date().toISOString());
 });
 
 server.on('error', (err) => {
   console.error('❌ Server error:', err);
+  console.error('Stack trace:', err.stack);
   process.exit(1);
 });
 
@@ -270,6 +308,7 @@ process.on('SIGINT', () => {
 
 process.on('uncaughtException', (err) => {
   console.error('💥 Uncaught Exception:', err);
+  console.error('Stack trace:', err.stack);
   process.exit(1);
 });
 
