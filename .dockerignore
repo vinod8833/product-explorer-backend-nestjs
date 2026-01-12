@@ -25,8 +25,9 @@ Thumbs.db
 .git
 .gitignore
 
-# Docker
-Dockerfile*
+# Docker (exclude other dockerfiles but not our files)
+Dockerfile
+Dockerfile.dev
 docker-compose*
 .dockerignore
 
@@ -54,8 +55,13 @@ storage/key_value_stores
 storage/request_queues
 
 # Documentation
-README.md
 docs
 
-# Scripts (keep only essential ones)
+# Scripts (keep essential ones)
 deploy.sh
+
+# Keep these important files
+!railway-server.js
+!src/
+!package*.json
+!*.toml

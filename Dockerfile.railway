@@ -1,33 +1,29 @@
 FROM node:20-alpine
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
-
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci && npm cache clean --force
+RUN npm ci --only=production && npm cache clean --force
 
-# Copy all application files
-COPY . .
+# Copy the railway server file explicitly
+COPY railway-server.js ./railway-server.js
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001 -G nodejs && \
-    chown -R nestjs:nodejs /app
+# Copy src directory
+COPY src/ ./src/
 
-USER nestjs
+# Verify the file is there
+RUN echo "Checking files in /app:" && ls -la /app/ && \
+    echo "Checking if railway-server.js exists:" && \
+    test -f /app/railway-server.js && echo "✅ railway-server.js found" || echo "❌ railway-server.js NOT found"
 
 EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
-
-ENTRYPOINT ["dumb-init", "--"]
 
 # Start the Railway server
 CMD ["node", "railway-server.js"]
