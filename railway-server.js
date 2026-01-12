@@ -1,4 +1,4 @@
-// Railway deployment server - Full NestJS Application with Scraping Integration
+// Railway deployment server - Full NestJS Application with Scraping Integration v2.0
 // This file starts the complete NestJS application with Swagger API docs and scraping endpoints
 
 const path = require('path');

@@ -14,5 +14,11 @@ variables = {
   PORT = "3001", 
   HOST = "0.0.0.0",
   DATABASE_URL = "postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway",
-  ENABLE_SWAGGER = "true"
+  ENABLE_SWAGGER = "true",
+  WOB_BASE_URL = "https://www.worldofbooks.com",
+  SCRAPING_DELAY_MIN = "1000",
+  SCRAPING_DELAY_MAX = "3000",
+  SCRAPING_MAX_RETRIES = "3",
+  SCRAPING_TIMEOUT = "30000",
+  SCRAPING_RESPECT_ROBOTS = "true"
 }
