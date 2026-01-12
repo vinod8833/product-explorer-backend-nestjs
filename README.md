@@ -257,16 +257,41 @@ make status             # Detailed service status
 
 ## 🏭 Production Deployment
 
-For production deployment:
+### Railway Deployment
+
+Your backend is configured for Railway deployment with multiple fallback mechanisms:
+
+```bash
+# The deployment will try these methods in order:
+1. src/railway-server.js (main server)
+2. railway-server.js (fallback)
+3. npm run start:railway (package.json script)
+```
+
+**Deployment files:**
+- `railway.toml` - Railway configuration
+- `nixpacks.toml` - Build configuration  
+- `start-railway.sh` - Startup script with fallbacks
+- `src/railway-server.js` - Main Railway server
+- `railway-server.js` - Fallback server
+
+**To deploy:**
+1. Push your changes to GitHub
+2. Railway will automatically deploy
+3. Check logs for startup process
+4. Visit your Railway URL
+
+**If deployment fails:**
+- Check Railway logs for specific errors
+- Ensure all environment variables are set
+- Verify the startup script has execute permissions
+
+### Manual Production Setup
+
+For production deployment on other platforms:
 
 ```bash
 make prod-setup
-```
-
-Or manually:
-```bash
-./docker-prod.sh up
-./docker-prod.sh migrate
 ```
 
 This uses optimized Docker containers with:
