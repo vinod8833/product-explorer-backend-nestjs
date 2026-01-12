@@ -65,9 +65,11 @@ COPY --from=builder /app/tsconfig.json ./tsconfig.json
 # Copy the railway server
 COPY railway-server.js ./railway-server.js
 
-# Set Playwright environment variables
+# Set Playwright environment variables and DATABASE_URL
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV DATABASE_URL=postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway
+ENV NODE_ENV=production
 
 # Change ownership to non-root user
 RUN chown -R nestjs:nodejs /app

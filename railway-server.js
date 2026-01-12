@@ -13,6 +13,13 @@ console.log('Environment:', process.env.NODE_ENV);
 console.log('Port:', process.env.PORT || 3001);
 console.log('Host:', process.env.HOST || '0.0.0.0');
 
+// Ensure DATABASE_URL is set for Railway deployment
+if (!process.env.DATABASE_URL) {
+  console.log('⚠️ DATABASE_URL not found in environment, setting Railway PostgreSQL URL...');
+  process.env.DATABASE_URL = 'postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway';
+}
+console.log('Database URL:', process.env.DATABASE_URL ? 'Set ✅' : 'Not set ❌');
+
 // List files to debug
 console.log('Files in current directory:');
 try {
@@ -28,8 +35,12 @@ try {
   console.log('Could not list files:', error.message);
 }
 
-// Set production environment
+// Set production environment and ensure DATABASE_URL is available
 process.env.NODE_ENV = 'production';
+if (!process.env.DATABASE_URL) {
+  console.log('⚠️ DATABASE_URL not found in environment, setting Railway PostgreSQL URL...');
+  process.env.DATABASE_URL = 'postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway';
+}
 
 // Database connection test
 async function testDatabaseConnection() {
