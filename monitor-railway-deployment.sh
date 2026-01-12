@@ -1,46 +1,42 @@
 #!/bin/bash
 
-# Monitor Railway deployment status
+# Monitor Railway deployment for updates
 BASE_URL="https://product-explorer-backend-nestjs-production.up.railway.app"
 
-echo "🔍 Monitoring Railway deployment status..."
+echo "🔍 Monitoring Railway deployment for updates..."
 echo "Base URL: $BASE_URL"
 echo ""
 
-for i in {1..10}; do
-    echo "Check #$i - $(date)"
+# Function to check deployment status
+check_deployment() {
+    local response=$(curl -s "$BASE_URL/health" 2>/dev/null)
+    local port=$(echo "$response" | jq -r '.port' 2>/dev/null)
+    local database=$(echo "$response" | jq -r '.database' 2>/dev/null)
     
-    # Check health endpoint
-    HEALTH_RESPONSE=$(curl -s "$BASE_URL/health" 2>/dev/null)
+    echo "$(date '+%H:%M:%S') - Port: $port, Database: $database"
     
-    if echo "$HEALTH_RESPONSE" | grep -q '"database": "connected"'; then
-        echo "✅ Database is connected!"
-        echo "$HEALTH_RESPONSE" | jq '.' 2>/dev/null || echo "$HEALTH_RESPONSE"
-        break
-    elif echo "$HEALTH_RESPONSE" | grep -q '"database": "disconnected"'; then
-        echo "⚠️ Database still disconnected (old deployment)"
-    elif echo "$HEALTH_RESPONSE" | grep -q '"status": "ok"'; then
-        echo "🔄 Deployment responding but checking database status..."
-        echo "$HEALTH_RESPONSE" | jq '.database' 2>/dev/null || echo "Database status unknown"
-    else
-        echo "❌ Deployment not responding or error"
+    # Check if we have the new deployment (port 3001 and database connected)
+    if [[ "$port" == "3001" && "$database" != "disconnected" ]]; then
+        echo "✅ New deployment detected!"
+        echo "Testing scraping endpoints..."
+        
+        # Test scraping navigation
+        echo "🧭 Testing navigation scraping..."
+        curl -s "$BASE_URL/api/scraping/navigation" | jq '.success' 2>/dev/null || echo "Endpoint not ready"
+        
+        return 0
     fi
     
-    # Check if scraping endpoints are available
-    SCRAPING_RESPONSE=$(curl -s "$BASE_URL/api/scraping/navigation" 2>/dev/null)
-    if echo "$SCRAPING_RESPONSE" | grep -q '"success"'; then
-        echo "🕷️ Scraping endpoints are live!"
-        break
-    elif echo "$SCRAPING_RESPONSE" | grep -q '"message": "Scraping API endpoint"'; then
-        echo "🔄 Old scraping endpoint (deployment not updated yet)"
+    return 1
+}
+
+# Monitor for up to 10 minutes
+for i in {1..60}; do
+    if check_deployment; then
+        echo "🎉 Railway deployment updated successfully!"
+        exit 0
     fi
-    
-    echo "---"
-    
-    if [ $i -lt 10 ]; then
-        sleep 60  # Wait 1 minute between checks
-    fi
+    sleep 10
 done
 
-echo ""
-echo "🏁 Monitoring completed"
+echo "⏰ Monitoring timeout reached. Deployment may still be in progress."
