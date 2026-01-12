@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { EthicalScraperService } from '../modules/scraping/ethical-scraper.service';

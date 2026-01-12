@@ -4,7 +4,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
   name = 'InitialSchema1704067200000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Create enums
     await queryRunner.query(`
       CREATE TYPE "scrape_job_target_type_enum" AS ENUM(
         'navigation', 'category', 'product_list', 'product_detail'
@@ -17,7 +16,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create navigation table
     await queryRunner.query(`
       CREATE TABLE "navigation" (
         "id" SERIAL NOT NULL,
@@ -33,7 +31,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create category table
     await queryRunner.query(`
       CREATE TABLE "category" (
         "id" SERIAL NOT NULL,
@@ -51,7 +48,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create product table
     await queryRunner.query(`
       CREATE TABLE "product" (
         "id" SERIAL NOT NULL,
@@ -72,7 +68,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create product_detail table
     await queryRunner.query(`
       CREATE TABLE "product_detail" (
         "id" SERIAL NOT NULL,
@@ -93,7 +88,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create review table
     await queryRunner.query(`
       CREATE TABLE "review" (
         "id" SERIAL NOT NULL,
@@ -109,7 +103,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create scrape_job table
     await queryRunner.query(`
       CREATE TABLE "scrape_job" (
         "id" SERIAL NOT NULL,
@@ -130,7 +123,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create view_history table
     await queryRunner.query(`
       CREATE TABLE "view_history" (
         "id" SERIAL NOT NULL,
@@ -145,7 +137,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
       )
     `);
 
-    // Create indexes
     await queryRunner.query(`CREATE INDEX "IDX_navigation_slug" ON "navigation" ("slug")`);
     await queryRunner.query(`CREATE INDEX "IDX_category_navigation_id" ON "category" ("navigation_id")`);
     await queryRunner.query(`CREATE INDEX "IDX_category_parent_id" ON "category" ("parent_id")`);
@@ -164,7 +155,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
     await queryRunner.query(`CREATE INDEX "IDX_view_history_entity" ON "view_history" ("entity_type", "entity_id")`);
     await queryRunner.query(`CREATE INDEX "IDX_view_history_created_at" ON "view_history" ("created_at")`);
 
-    // Add foreign key constraints
     await queryRunner.query(`
       ALTER TABLE "category" 
       ADD CONSTRAINT "FK_category_navigation_id" 
@@ -197,14 +187,12 @@ export class InitialSchema1704067200000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Drop foreign key constraints
     await queryRunner.query(`ALTER TABLE "review" DROP CONSTRAINT "FK_review_product_id"`);
     await queryRunner.query(`ALTER TABLE "product_detail" DROP CONSTRAINT "FK_product_detail_product_id"`);
     await queryRunner.query(`ALTER TABLE "product" DROP CONSTRAINT "FK_product_category_id"`);
     await queryRunner.query(`ALTER TABLE "category" DROP CONSTRAINT "FK_category_parent_id"`);
     await queryRunner.query(`ALTER TABLE "category" DROP CONSTRAINT "FK_category_navigation_id"`);
 
-    // Drop indexes
     await queryRunner.query(`DROP INDEX "IDX_view_history_created_at"`);
     await queryRunner.query(`DROP INDEX "IDX_view_history_entity"`);
     await queryRunner.query(`DROP INDEX "IDX_scrape_job_created_at"`);
@@ -223,7 +211,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "IDX_category_navigation_id"`);
     await queryRunner.query(`DROP INDEX "IDX_navigation_slug"`);
 
-    // Drop tables
     await queryRunner.query(`DROP TABLE "view_history"`);
     await queryRunner.query(`DROP TABLE "scrape_job"`);
     await queryRunner.query(`DROP TABLE "review"`);
@@ -232,7 +219,6 @@ export class InitialSchema1704067200000 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "category"`);
     await queryRunner.query(`DROP TABLE "navigation"`);
 
-    // Drop enums
     await queryRunner.query(`DROP TYPE "scrape_job_status_enum"`);
     await queryRunner.query(`DROP TYPE "scrape_job_target_type_enum"`);
   }

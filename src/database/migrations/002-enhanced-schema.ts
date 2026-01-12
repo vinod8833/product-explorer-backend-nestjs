@@ -4,7 +4,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
   name = 'EnhancedSchema1704067300000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add cache management table
     await queryRunner.query(`
       CREATE TABLE "cache_entry" (
         "id" SERIAL NOT NULL,
@@ -18,7 +17,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Add scraping statistics table
     await queryRunner.query(`
       CREATE TABLE "scraping_stats" (
         "id" SERIAL NOT NULL,
@@ -36,7 +34,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Add product availability tracking
     await queryRunner.query(`
       CREATE TABLE "product_availability" (
         "id" SERIAL NOT NULL,
@@ -50,7 +47,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Add search analytics
     await queryRunner.query(`
       CREATE TABLE "search_analytics" (
         "id" SERIAL NOT NULL,
@@ -65,7 +61,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Add API rate limiting table
     await queryRunner.query(`
       CREATE TABLE "rate_limit" (
         "id" SERIAL NOT NULL,
@@ -81,7 +76,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Add product recommendations table
     await queryRunner.query(`
       CREATE TABLE "product_recommendation" (
         "id" SERIAL NOT NULL,
@@ -96,7 +90,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       )
     `);
 
-    // Enhanced indexes for performance
     await queryRunner.query(`CREATE INDEX "IDX_cache_entry_expires_at" ON "cache_entry" ("expires_at")`);
     await queryRunner.query(`CREATE INDEX "IDX_scraping_stats_domain_date" ON "scraping_stats" ("domain", "date")`);
     await queryRunner.query(`CREATE INDEX "IDX_product_availability_product_id" ON "product_availability" ("product_id")`);
@@ -107,7 +100,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
     await queryRunner.query(`CREATE INDEX "IDX_product_recommendation_source" ON "product_recommendation" ("source_product_id")`);
     await queryRunner.query(`CREATE INDEX "IDX_product_recommendation_score" ON "product_recommendation" ("score" DESC)`);
 
-    // Add foreign key constraints
     await queryRunner.query(`
       ALTER TABLE "product_availability" 
       ADD CONSTRAINT "FK_product_availability_product_id" 
@@ -132,7 +124,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       FOREIGN KEY ("recommended_product_id") REFERENCES "product"("id") ON DELETE CASCADE ON UPDATE NO ACTION
     `);
 
-    // Add materialized view for popular products
     await queryRunner.query(`
       CREATE MATERIALIZED VIEW "popular_products" AS
       SELECT 
@@ -155,7 +146,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
 
     await queryRunner.query(`CREATE UNIQUE INDEX "IDX_popular_products_id" ON "popular_products" ("id")`);
 
-    // Add function to refresh materialized view
     await queryRunner.query(`
       CREATE OR REPLACE FUNCTION refresh_popular_products()
       RETURNS void AS $$
@@ -165,7 +155,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
       $$ LANGUAGE plpgsql;
     `);
 
-    // Add cleanup function for expired cache entries
     await queryRunner.query(`
       CREATE OR REPLACE FUNCTION cleanup_expired_cache()
       RETURNS void AS $$
@@ -177,20 +166,16 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Drop functions
     await queryRunner.query(`DROP FUNCTION IF EXISTS cleanup_expired_cache()`);
     await queryRunner.query(`DROP FUNCTION IF EXISTS refresh_popular_products()`);
 
-    // Drop materialized view
     await queryRunner.query(`DROP MATERIALIZED VIEW IF EXISTS "popular_products"`);
 
-    // Drop foreign key constraints
     await queryRunner.query(`ALTER TABLE "product_recommendation" DROP CONSTRAINT "FK_product_recommendation_target"`);
     await queryRunner.query(`ALTER TABLE "product_recommendation" DROP CONSTRAINT "FK_product_recommendation_source"`);
     await queryRunner.query(`ALTER TABLE "search_analytics" DROP CONSTRAINT "FK_search_analytics_clicked_result"`);
     await queryRunner.query(`ALTER TABLE "product_availability" DROP CONSTRAINT "FK_product_availability_product_id"`);
 
-    // Drop indexes
     await queryRunner.query(`DROP INDEX "IDX_product_recommendation_score"`);
     await queryRunner.query(`DROP INDEX "IDX_product_recommendation_source"`);
     await queryRunner.query(`DROP INDEX "IDX_rate_limit_window"`);
@@ -201,7 +186,6 @@ export class EnhancedSchema1704067300000 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "IDX_scraping_stats_domain_date"`);
     await queryRunner.query(`DROP INDEX "IDX_cache_entry_expires_at"`);
 
-    // Drop tables
     await queryRunner.query(`DROP TABLE "product_recommendation"`);
     await queryRunner.query(`DROP TABLE "rate_limit"`);
     await queryRunner.query(`DROP TABLE "search_analytics"`);

@@ -8,7 +8,7 @@ const world_of_books_scraper_service_1 = require("../modules/scraping/world-of-b
 const world_of_books_api_service_1 = require("../modules/scraping/world-of-books-api.service");
 const world_of_books_enhanced_service_1 = require("../modules/scraping/world-of-books-enhanced.service");
 async function runDemo() {
-    console.log('🚀 World of Books Scraping Demo\n');
+    console.log('World of Books Scraping Demo\n');
     console.log('='.repeat(60));
     const app = await core_1.NestFactory.createApplicationContext(app_module_1.AppModule);
     const scrapingService = app.get(scraping_service_1.ScrapingService);

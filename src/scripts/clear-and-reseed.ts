@@ -5,7 +5,7 @@ import { Review } from '../database/entities/review.entity';
 import { seedLargeDataset } from './seed-large-dataset';
 
 async function clearAndReseed() {
-  console.log('🗑️  Clearing existing product data...');
+  console.log(' Clearing existing product data...');
   
   try {
     await AppDataSource.initialize();

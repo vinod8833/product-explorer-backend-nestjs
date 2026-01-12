@@ -523,7 +523,6 @@ export class WorldOfBooksApiService {
 
     this.logger.log(`Advanced search with options: ${JSON.stringify(searchOptions)}`);
 
-    // Build filters
     const filterParts = [
       'inStock:true',
       'productType:Book',
@@ -541,7 +540,6 @@ export class WorldOfBooksApiService {
 
     const filters = filterParts.join(' AND ');
 
-    // Build facet filters for categories
     const facetFilters: string[][] = [];
     if (categories.length > 0) {
       facetFilters.push(categories.map(cat => `hierarchicalCategories.lvl0:${cat}`));

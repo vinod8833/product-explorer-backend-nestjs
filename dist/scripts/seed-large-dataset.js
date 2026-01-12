@@ -9,6 +9,9 @@ const product_detail_entity_1 = require("../database/entities/product-detail.ent
 const review_entity_1 = require("../database/entities/review.entity");
 const getWorldOfBooksImageUrl = (sourceId, isbn) => {
     const cleanSourceId = sourceId.replace(/[^a-zA-Z0-9]/g, '');
+    if (!cleanSourceId) {
+        return getFallbackImageUrl(Math.floor(Math.random() * 1000));
+    }
     const patterns = [
         `https://images.worldofbooks.com/book/${cleanSourceId}.jpg`,
         `https://cdn.worldofbooks.com/images/${cleanSourceId}_medium.jpg`,
@@ -18,7 +21,7 @@ const getWorldOfBooksImageUrl = (sourceId, isbn) => {
     return patterns[Math.floor(Math.random() * patterns.length)];
 };
 const getFallbackImageUrl = (index) => {
-    return `https://images.worldofbooks.com/placeholder/book-${index}.jpg`;
+    return `https://images.worldofbooks.com/placeholder/book-${index % 100}.jpg`;
 };
 const sampleBooks = [
     { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', isbn: '9780743273565', genre: 'Classic Literature' },
@@ -130,7 +133,6 @@ const publishers = [
     'Oxford University Press', 'Cambridge University Press', 'Vintage Books', 'Anchor Books',
     'Bantam Books', 'Dell Publishing', 'Doubleday', 'Knopf', 'Little, Brown and Company'
 ];
-const conditions = ['LIKE_NEW', 'VERY_GOOD', 'GOOD', 'WELL_READ'];
 function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
@@ -206,7 +208,14 @@ async function seedLargeDataset(dataSource, count = 1200) {
                 `978${String(Math.floor(Math.random() * 1000000000)).padStart(9, '0')}` :
                 baseBook.isbn;
             const sourceId = `book-${i + 1}`;
-            const imageUrl = Math.random() > 0.2 ? getWorldOfBooksImageUrl(sourceId, isbn) : getFallbackImageUrl(i + 1);
+            let imageUrl;
+            try {
+                imageUrl = Math.random() > 0.2 ? getWorldOfBooksImageUrl(sourceId, isbn) : getFallbackImageUrl(i + 1);
+                new URL(imageUrl);
+            }
+            catch (error) {
+                imageUrl = getFallbackImageUrl(i + 1);
+            }
             const price = getRandomPrice();
             const inStock = Math.random() > 0.1;
             const existingProduct = await productRepo.findOne({ where: { sourceId } });

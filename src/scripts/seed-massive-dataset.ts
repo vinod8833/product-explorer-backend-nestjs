@@ -192,7 +192,7 @@ function getRandomPageCount(): number {
 }
 
 function getRandomRating(): number {
-  return parseFloat((Math.random() * 2 + 3).toFixed(2)); // 3.00 to 5.00
+  return parseFloat((Math.random() * 2 + 3).toFixed(2)); 
 }
 
 function getRandomReviewCount(): number {
@@ -214,7 +214,7 @@ function generateImageUrl(title: string, isbn: string, sourceId: string): string
 }
 
 async function seedMassiveDataset() {
-  console.log('🌱 Starting massive dataset seeding...');
+  console.log('Starting massive dataset seeding...');
   
   try {
     if (!AppDataSource.isInitialized) {

@@ -189,7 +189,7 @@ function generateImageUrl(title, isbn, sourceId) {
     return `https://dummyimage.com/300x400/4a5568/ffffff&text=${cleanTitle}`;
 }
 async function seedMassiveDataset() {
-    console.log('🌱 Starting massive dataset seeding...');
+    console.log('Starting massive dataset seeding...');
     try {
         if (!data_source_1.AppDataSource.isInitialized) {
             await data_source_1.AppDataSource.initialize();

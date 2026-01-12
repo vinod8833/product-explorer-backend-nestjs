@@ -59,7 +59,6 @@ export class CustomLoggerService implements LoggerService {
     );
 
     if (nodeEnv === 'production') {
-      // Error logs
       transports.push(
         new DailyRotateFile({
           filename: 'logs/error-%DATE%.log',

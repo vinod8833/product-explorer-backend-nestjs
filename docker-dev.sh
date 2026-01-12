@@ -26,7 +26,6 @@ if ! command -v docker-compose &> /dev/null; then
     exit 1
 fi
 
-# Set environment file
 ENV_FILE=".env.docker"
 if [ ! -f "$ENV_FILE" ]; then
     echo "  $ENV_FILE not found, copying from .env.example"

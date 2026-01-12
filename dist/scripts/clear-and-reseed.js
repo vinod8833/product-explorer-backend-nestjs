@@ -7,7 +7,7 @@ const product_detail_entity_1 = require("../database/entities/product-detail.ent
 const review_entity_1 = require("../database/entities/review.entity");
 const seed_large_dataset_1 = require("./seed-large-dataset");
 async function clearAndReseed() {
-    console.log('🗑️  Clearing existing product data...');
+    console.log(' Clearing existing product data...');
     try {
         await data_source_1.AppDataSource.initialize();
         const productRepo = data_source_1.AppDataSource.getRepository(product_entity_1.Product);

@@ -4,27 +4,26 @@ const { Client } = require('pg');
 const port = process.env.PORT || 3001;
 const host = '0.0.0.0';
 
-console.log('🚀 Starting Railway Production Server...');
+console.log(' Starting Railway Production Server...');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port:', port);
 console.log('Host:', host);
 console.log('Database URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
 
-// Test database connection
 async function testDatabase() {
   if (!process.env.DATABASE_URL) {
-    console.log('⚠️  No DATABASE_URL provided');
+    console.log('  No DATABASE_URL provided');
     return false;
   }
 
   try {
     const client = new Client({ connectionString: process.env.DATABASE_URL });
     await client.connect();
-    console.log('✅ Database connection successful');
+    console.log(' Database connection successful');
     await client.end();
     return true;
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error(' Database connection failed:', error.message);
     return false;
   }
 }
@@ -32,7 +31,6 @@ async function testDatabase() {
 const server = http.createServer(async (req, res) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   
-  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -91,39 +89,38 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`✅ Server running at http://${host}:${port}`);
-  console.log(`💚 Health check: http://${host}:${port}/health`);
-  console.log(`🌐 Root: http://${host}:${port}/`);
+  console.log(` Server running at http://${host}:${port}`);
+  console.log(` Health check: http://${host}:${port}/health`);
+  console.log(` Root: http://${host}:${port}/`);
 });
 
 server.on('error', (err) => {
-  console.error('❌ Server error:', err);
+  console.error(' Server error:', err);
   process.exit(1);
 });
 
 process.on('SIGTERM', () => {
-  console.log('📴 Received SIGTERM, shutting down gracefully');
+  console.log(' Received SIGTERM, shutting down gracefully');
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log(' Server closed');
     process.exit(0);
   });
 });
 
 process.on('SIGINT', () => {
-  console.log('📴 Received SIGINT, shutting down gracefully');
+  console.log(' Received SIGINT, shutting down gracefully');
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log(' Server closed');
     process.exit(0);
   });
 });
 
-// Keep the process alive
 process.on('uncaughtException', (err) => {
-  console.error('💥 Uncaught Exception:', err);
+  console.error(' Uncaught Exception:', err);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error(' Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 });

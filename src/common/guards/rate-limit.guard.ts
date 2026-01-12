@@ -4,8 +4,8 @@ import { Request } from 'express';
 @Injectable()
 export class RateLimitGuard implements CanActivate {
   private requests = new Map<string, { count: number; resetTime: number }>();
-  private readonly maxRequests = 100; // requests per window
-  private readonly windowMs = 15 * 60 * 1000; // 15 minutes
+  private readonly maxRequests = 100; 
+  private readonly windowMs = 15 * 60 * 1000; 
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();

@@ -29,7 +29,7 @@ import { LoggingMiddleware } from './common/middleware/logging.middleware';
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false, // Never sync in production
+        synchronize: false, 
         logging: ['error', 'warn'],
         maxQueryExecutionTime: 10000,
         ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
@@ -67,7 +67,6 @@ import { LoggingMiddleware } from './common/middleware/logging.middleware';
     NavigationModule,
     CategoryModule,
     ProductModule,
-    // ScrapingModule, // Disable scraping in production for now
     HealthModule,
   ],
   providers: [

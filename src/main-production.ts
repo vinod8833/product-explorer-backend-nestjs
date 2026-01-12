@@ -18,7 +18,6 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
 
-    // Security headers
     app.use((req: any, res: any, next: any) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');
       res.setHeader('X-Frame-Options', 'DENY');
@@ -29,7 +28,6 @@ async function bootstrap() {
       next();
     });
 
-    // Validation pipe
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -55,9 +53,8 @@ async function bootstrap() {
 
     app.useGlobalFilters(new GlobalExceptionFilter());
 
-    // CORS configuration
     app.enableCors({
-      origin: true, // Allow all origins in production for now
+      origin: true, 
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       allowedHeaders: [
@@ -76,7 +73,6 @@ async function bootstrap() {
       exclude: ['health', 'metrics'],
     });
 
-    // Swagger documentation
     const config = new DocumentBuilder()
       .setTitle('Product Data Explorer API')
       .setDescription('A comprehensive API for product data exploration and management')
@@ -94,7 +90,6 @@ async function bootstrap() {
       },
     });
 
-    // Enhanced health check
     app.use('/health', (req: any, res: any) => {
       res.status(200).json({
         status: 'ok',
@@ -102,7 +97,7 @@ async function bootstrap() {
         uptime: process.uptime(),
         environment: configService.get('NODE_ENV'),
         version: '1.0.0',
-        database: 'connected', // We'll assume it's connected if we get here
+        database: 'connected', 
         memory: {
           used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB',
           total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + ' MB',
@@ -110,7 +105,6 @@ async function bootstrap() {
       });
     });
 
-    // Root endpoint
     app.use('/', (req: any, res: any, next: any) => {
       if (req.url === '/') {
         res.status(200).json({
@@ -139,7 +133,6 @@ async function bootstrap() {
     logger.log(`Environment: ${configService.get('NODE_ENV')}`);
     logger.log(`Database URL: ${configService.get('DATABASE_URL') ? 'Connected' : 'Not configured'}`);
     
-    // Log all environment variables for debugging (remove in production)
     if (configService.get('NODE_ENV') !== 'production') {
       logger.log('Environment variables:', {
         PORT: process.env.PORT,

@@ -6,13 +6,13 @@
   "requestsFinishedPerMinute": 0,
   "requestMinDurationMillis": null,
   "requestMaxDurationMillis": 0,
-  "requestTotalFailedDurationMillis": 40318,
+  "requestTotalFailedDurationMillis": 49004,
   "requestTotalFinishedDurationMillis": 0,
-  "crawlerStartedAt": "2026-01-07T11:14:29.962Z",
-  "crawlerFinishedAt": "2026-01-07T11:17:15.513Z",
-  "statsPersistedAt": "2026-01-07T11:17:15.513Z",
-  "crawlerRuntimeMillis": 166438,
-  "crawlerLastStartTimestamp": 1767784469075,
+  "crawlerStartedAt": "2026-01-12T11:17:25.384Z",
+  "crawlerFinishedAt": "2026-01-12T11:20:21.488Z",
+  "statsPersistedAt": "2026-01-12T11:20:21.488Z",
+  "crawlerRuntimeMillis": 177524,
+  "crawlerLastStartTimestamp": 1768216643964,
   "requestRetryHistogram": [
     null,
     null,
@@ -20,15 +20,15 @@
     1
   ],
   "statsId": 0,
-  "requestAvgFailedDurationMillis": 40318,
+  "requestAvgFailedDurationMillis": 49004,
   "requestAvgFinishedDurationMillis": null,
-  "requestTotalDurationMillis": 40318,
+  "requestTotalDurationMillis": 49004,
   "requestsTotal": 1,
   "requestsWithStatusCode": {
     "404": 4
   },
   "errors": {
-    "/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74": {
+    "/home/vinod/product-explorer-backend-nestjs/node_modules/@apify/src/index.ts:88:74": {
       "missing error code": {
         "Error": {
           "requestHandler timed out after 30 seconds.": {
@@ -39,7 +39,7 @@
     }
   },
   "retryErrors": {
-    "/home/vinod/Downloads/Learn_Project/BookData Hub/backend/node_modules/@apify/src/index.ts:88:74": {
+    "/home/vinod/product-explorer-backend-nestjs/node_modules/@apify/src/index.ts:88:74": {
       "missing error code": {
         "Error": {
           "requestHandler timed out after 30 seconds.": {

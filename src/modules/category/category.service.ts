@@ -34,7 +34,7 @@ export class CategoryService {
     const skip = (page - 1) * limit;
 
     const [categories, total] = await this.categoryRepository.findAndCount({
-      where: { navigationId, parentId: null }, // Only root categories
+      where: { navigationId, parentId: null }, 
       skip,
       take: limit,
       order: { title: 'ASC' },

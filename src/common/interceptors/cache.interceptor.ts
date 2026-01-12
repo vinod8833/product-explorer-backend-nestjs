@@ -32,7 +32,7 @@ export class CacheInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(async (result) => {
-        await this.cacheManager.set(cacheKey, result, 300); // 5 minutes default
+        await this.cacheManager.set(cacheKey, result, 300); 
       }),
     );
   }

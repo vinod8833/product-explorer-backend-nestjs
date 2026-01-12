@@ -6,7 +6,7 @@ import { WorldOfBooksScraperService } from '../modules/scraping/world-of-books-s
 import { WorldOfBooksApiService } from '../modules/scraping/world-of-books-api.service';
 
 async function testScraping() {
-  console.log('🚀 Starting World of Books scraping test...\n');
+  console.log('Starting World of Books scraping test...\n');
 
   const app = await NestFactory.createApplicationContext(AppModule);
   

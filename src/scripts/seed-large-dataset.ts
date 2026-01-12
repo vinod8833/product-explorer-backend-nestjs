@@ -9,6 +9,11 @@ import { Review } from '../database/entities/review.entity';
 const getWorldOfBooksImageUrl = (sourceId: string, isbn?: string) => {
   const cleanSourceId = sourceId.replace(/[^a-zA-Z0-9]/g, '');
   
+  // Ensure we have a valid sourceId
+  if (!cleanSourceId) {
+    return getFallbackImageUrl(Math.floor(Math.random() * 1000));
+  }
+  
   const patterns = [
     `https://images.worldofbooks.com/book/${cleanSourceId}.jpg`,
     `https://cdn.worldofbooks.com/images/${cleanSourceId}_medium.jpg`,
@@ -20,7 +25,7 @@ const getWorldOfBooksImageUrl = (sourceId: string, isbn?: string) => {
 };
 
 const getFallbackImageUrl = (index: number) => {
-  return `https://images.worldofbooks.com/placeholder/book-${index}.jpg`;
+  return `https://images.worldofbooks.com/placeholder/book-${index % 100}.jpg`;
 };
 
 const sampleBooks = [
@@ -135,8 +140,6 @@ const publishers = [
   'Bantam Books', 'Dell Publishing', 'Doubleday', 'Knopf', 'Little, Brown and Company'
 ];
 
-const conditions = ['LIKE_NEW', 'VERY_GOOD', 'GOOD', 'WELL_READ'];
-
 function getRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
@@ -229,7 +232,17 @@ export async function seedLargeDataset(dataSource: DataSource, count: number = 1
       
       const sourceId = `book-${i + 1}`;
       
-      const imageUrl = Math.random() > 0.2 ? getWorldOfBooksImageUrl(sourceId, isbn) : getFallbackImageUrl(i + 1);
+      // Generate a valid image URL with proper validation
+      let imageUrl: string;
+      try {
+        imageUrl = Math.random() > 0.2 ? getWorldOfBooksImageUrl(sourceId, isbn) : getFallbackImageUrl(i + 1);
+        // Validate the URL
+        new URL(imageUrl);
+      } catch (error) {
+        // Fallback to a safe default if URL is invalid
+        imageUrl = getFallbackImageUrl(i + 1);
+      }
+      
       const price = getRandomPrice();
       const inStock = Math.random() > 0.1; // 90% in stock
       
@@ -280,7 +293,7 @@ export async function seedLargeDataset(dataSource: DataSource, count: number = 1
         reviews.push({
           sourceId,
           author: `${getRandomElement(reviewAuthors)}${Math.floor(Math.random() * 1000)}`,
-          rating: Math.floor(Math.random() * 2) + 4, // 4 or 5 stars
+          rating: Math.floor(Math.random() * 2) + 4, 
           text: getRandomElement(reviewTexts),
           reviewDate: getRandomDate(new Date(2023, 0, 1), new Date()),
           helpfulCount: Math.floor(Math.random() * 50),

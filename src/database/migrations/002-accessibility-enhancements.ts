@@ -4,9 +4,7 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
   name = 'AccessibilityEnhancements1704067300000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add accessibility-related columns to existing tables
-    
-    // Enhance product table with accessibility metadata
+
     await queryRunner.query(`
       ALTER TABLE "product" 
       ADD COLUMN "alt_text" TEXT,
@@ -16,7 +14,6 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
       ADD COLUMN "language_code" VARCHAR(10) DEFAULT 'en'
     `);
 
-    // Enhance view_history with more detailed tracking
     await queryRunner.query(`
       ALTER TABLE "view_history" 
       ADD COLUMN "session_id" VARCHAR(255),
@@ -29,7 +26,6 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
       ADD COLUMN "scroll_depth" DECIMAL(5,2) DEFAULT 0
     `);
 
-    // Create user preferences table for accessibility settings
     await queryRunner.query(`
       CREATE TABLE "user_preferences" (
         "id" SERIAL PRIMARY KEY,
@@ -41,7 +37,6 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
       )
     `);
 
-    // Create search analytics table
     await queryRunner.query(`
       CREATE TABLE "search_analytics" (
         "id" SERIAL PRIMARY KEY,
@@ -57,7 +52,6 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
       )
     `);
 
-    // Create performance metrics table
     await queryRunner.query(`
       CREATE TABLE "performance_metrics" (
         "id" SERIAL PRIMARY KEY,
@@ -71,7 +65,6 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
       )
     `);
 
-    // Add indexes for performance
     await queryRunner.query(`CREATE INDEX "IDX_view_history_session" ON "view_history" ("session_id")`);
     await queryRunner.query(`CREATE INDEX "IDX_view_history_product" ON "view_history" ("product_id")`);
     await queryRunner.query(`CREATE INDEX "IDX_search_analytics_query" ON "search_analytics" ("query")`);
@@ -81,12 +74,10 @@ export class AccessibilityEnhancements1704067300000 implements MigrationInterfac
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Drop new tables
     await queryRunner.query(`DROP TABLE "performance_metrics"`);
     await queryRunner.query(`DROP TABLE "search_analytics"`);
     await queryRunner.query(`DROP TABLE "user_preferences"`);
 
-    // Remove added columns
     await queryRunner.query(`
       ALTER TABLE "view_history" 
       DROP COLUMN "scroll_depth",

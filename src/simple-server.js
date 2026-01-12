@@ -3,7 +3,7 @@ const http = require('http');
 const port = process.env.PORT || 3001;
 const host = process.env.HOST || '0.0.0.0';
 
-console.log('🚀 Starting simple test server...');
+console.log('Starting simple test server...');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port:', port);
 console.log('Host:', host);
@@ -33,27 +33,27 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`✅ Server running at http://${host}:${port}`);
-  console.log(`💚 Health check: http://${host}:${port}/health`);
+  console.log(` Server running at http://${host}:${port}`);
+  console.log(` Health check: http://${host}:${port}/health`);
 });
 
 server.on('error', (err) => {
-  console.error('❌ Server error:', err);
+  console.error(' Server error:', err);
   process.exit(1);
 });
 
 process.on('SIGTERM', () => {
-  console.log('📴 Received SIGTERM, shutting down gracefully');
+  console.log('Received SIGTERM, shutting down gracefully');
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log('Server closed');
     process.exit(0);
   });
 });
 
 process.on('SIGINT', () => {
-  console.log('📴 Received SIGINT, shutting down gracefully');
+  console.log('Received SIGINT, shutting down gracefully');
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log('Server closed');
     process.exit(0);
   });
 });
