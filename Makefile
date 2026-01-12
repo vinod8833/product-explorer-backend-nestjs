@@ -261,3 +261,23 @@ test-scraping:
 check-products:
 	@echo "📦 Checking product count..."
 	@curl -s "http://localhost:3001/api/products?limit=1" | grep -o '"total":[0-9]*' | cut -d: -f2 || echo "0"
+# Railway deployment testing
+test-railway-scraping:
+	@echo "🧪 Testing Railway scraping endpoints..."
+	@./test-railway-scraping-endpoints.sh
+
+railway-health:
+	@echo "🏥 Checking Railway deployment health..."
+	@curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/health" | jq '.' 2>/dev/null || curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/health"
+
+railway-scrape-navigation:
+	@echo "🧭 Testing Railway navigation scraping..."
+	@curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/navigation" | jq '.' 2>/dev/null || curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/navigation"
+
+railway-scrape-categories:
+	@echo "📂 Testing Railway category scraping..."
+	@curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/categories?url=https://www.worldofbooks.com/en-gb/category/books" | jq '.' 2>/dev/null || curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/categories?url=https://www.worldofbooks.com/en-gb/category/books"
+
+railway-scrape-products:
+	@echo "📦 Testing Railway product scraping..."
+	@curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/products?url=https://www.worldofbooks.com/en-gb/category/fiction&maxPages=1" | jq '.' 2>/dev/null || curl -s "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/products?url=https://www.worldofbooks.com/en-gb/category/fiction&maxPages=1"

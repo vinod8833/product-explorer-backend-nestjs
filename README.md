@@ -259,6 +259,57 @@ make status             # Detailed service status
 
 ### 🚂 Railway Deployment (Live)
 
+**Live URL**: https://product-explorer-backend-nestjs-production.up.railway.app
+
+The application is deployed on Railway with full scraping functionality integrated:
+
+#### Available Endpoints
+- **API Documentation**: `/api/docs` - Interactive Swagger UI
+- **Health Check**: `/health` - Service status and database connectivity
+- **Products API**: `/api/products` - Product listings and search
+- **Scraping API**: `/api/scraping/*` - Web scraping endpoints
+
+#### Scraping Endpoints
+```bash
+# Navigation scraping - Get site navigation structure
+GET /api/scraping/navigation
+
+# Category scraping - Scrape category listings
+GET /api/scraping/categories?url=<category_url>&maxDepth=3
+
+# Product scraping - Scrape product listings from category pages
+GET /api/scraping/products?url=<product_list_url>&maxPages=10
+
+# Product detail scraping - Get detailed product information
+GET /api/scraping/product-detail?url=<product_url>
+```
+
+#### Testing Railway Deployment
+```bash
+# Check deployment health and database connectivity
+make railway-health
+
+# Test individual scraping endpoints
+make railway-scrape-navigation
+make railway-scrape-categories  
+make railway-scrape-products
+
+# Run comprehensive scraping tests
+make test-railway-scraping
+```
+
+#### Example Usage
+```bash
+# Test navigation scraping
+curl "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/navigation"
+
+# Scrape World of Books categories
+curl "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/categories?url=https://www.worldofbooks.com/en-gb/category/books"
+
+# Scrape fiction products (limited to 1 page for testing)
+curl "https://product-explorer-backend-nestjs-production.up.railway.app/api/scraping/products?url=https://www.worldofbooks.com/en-gb/category/fiction&maxPages=1"
+```
+
 **🌐 Live Production URL**: https://product-explorer-backend-nestjs-production.up.railway.app/
 
 Your backend is **successfully deployed** on Railway with a robust, Docker-based approach and **PostgreSQL database connectivity**:
