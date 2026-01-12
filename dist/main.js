@@ -74,7 +74,7 @@ async function bootstrap() {
         app.setGlobalPrefix('api', {
             exclude: ['health', 'metrics'],
         });
-        if (configService.get('NODE_ENV') !== 'production') {
+        if (configService.get('NODE_ENV') !== 'production' || configService.get('ENABLE_SWAGGER') === 'true') {
             const config = new swagger_1.DocumentBuilder()
                 .setTitle('Product Data Explorer API')
                 .setDescription('A comprehensive API for product data exploration and management')
@@ -91,6 +91,7 @@ async function bootstrap() {
                     persistAuthorization: true,
                 },
             });
+            logger.log(`📚 Swagger API docs enabled at: /api/docs`);
         }
         app.use('/health', (req, res) => {
             res.status(200).json({

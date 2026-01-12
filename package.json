@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "nest build",
-    "build:prod": "nest build src/main-production.ts",
+    "build:prod": "nest build production",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

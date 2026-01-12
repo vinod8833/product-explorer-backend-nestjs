@@ -13,5 +13,6 @@ variables = {
   NODE_ENV = "production", 
   PORT = "3001", 
   HOST = "0.0.0.0",
-  DATABASE_URL = "postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway"
+  DATABASE_URL = "postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway",
+  ENABLE_SWAGGER = "true"
 }
