@@ -76,8 +76,8 @@ export class ScrapingService {
     }
 
     job.status = status;
-    if (errorLog) job.errorMessage = errorLog;
-    if (itemsScraped !== undefined) job.itemsProcessed = itemsScraped;
+    if (errorMessage) job.errorMessage = errorMessage;
+    if (itemsProcessed !== undefined) job.itemsProcessed = itemsProcessed;
 
     if (status === ScrapeJobStatus.RUNNING && !job.startedAt) {
       job.startedAt = new Date();

@@ -4,6 +4,7 @@ import { PlaywrightCrawler, ProxyConfiguration } from 'crawlee';
 import { Page } from 'playwright';
 import { ScrapingException } from '../../common/exceptions/custom-exceptions';
 import { SanitizationUtil } from '../../common/utils/sanitization.util';
+import axios from 'axios';
 
 export interface NavigationItem {
   title: string;
@@ -73,6 +74,155 @@ export class WorldOfBooksScraperService {
     this.timeout = this.configService.get('SCRAPING_TIMEOUT', 30000);
     this.respectRobotsTxt = this.configService.get('SCRAPING_RESPECT_ROBOTS', true);
     this.proxyUrls = this.configService.get('SCRAPING_PROXY_URLS', '').split(',').filter(Boolean);
+  }
+
+  /**
+   * Verify if an image URL is accessible and returns a valid image
+   */
+  async verifyImageUrl(imageUrl: string): Promise<boolean> {
+    if (!imageUrl) return false;
+    
+    try {
+      const response = await axios.head(imageUrl, {
+        timeout: 5000,
+        headers: {
+          'User-Agent': this.userAgent
+        }
+      });
+      
+      const contentType = response.headers['content-type'];
+      const isValidImage = contentType && contentType.startsWith('image/');
+      const isValidStatus = response.status >= 200 && response.status < 300;
+      
+      this.logger.debug(`Image verification for ${imageUrl}: ${isValidImage && isValidStatus ? 'VALID' : 'INVALID'}`);
+      return isValidImage && isValidStatus;
+    } catch (error) {
+      this.logger.warn(`Image verification failed for ${imageUrl}: ${error.message}`);
+      return false;
+    }
+  }
+
+  /**
+   * Check if product data is complete and images are valid
+   */
+  async validateProductData(product: ProductItem): Promise<{ isValid: boolean; missingFields: string[] }> {
+    const missingFields: string[] = [];
+    
+    // Check required fields
+    if (!product.title) missingFields.push('title');
+    if (!product.author) missingFields.push('author');
+    if (!product.price) missingFields.push('price');
+    if (!product.sourceUrl) missingFields.push('sourceUrl');
+    
+    // Check image validity
+    if (!product.imageUrl) {
+      missingFields.push('imageUrl');
+    } else {
+      const isImageValid = await this.verifyImageUrl(product.imageUrl);
+      if (!isImageValid) {
+        missingFields.push('validImageUrl');
+      }
+    }
+    
+    const isValid = missingFields.length === 0;
+    
+    this.logger.debug(`Product validation for ${product.sourceId}: ${isValid ? 'VALID' : 'INVALID'} (missing: ${missingFields.join(', ')})`);
+    
+    return { isValid, missingFields };
+  }
+
+  /**
+   * Scrape product data with automatic fallback when data is missing or invalid
+   */
+  async scrapeProductWithFallback(sourceId: string, existingProduct?: ProductItem): Promise<ProductItem | null> {
+    try {
+      // If we have existing product data, validate it first
+      if (existingProduct) {
+        const validation = await this.validateProductData(existingProduct);
+        if (validation.isValid) {
+          this.logger.debug(`Product ${sourceId} has valid data, no scraping needed`);
+          return existingProduct;
+        }
+        
+        this.logger.log(`Product ${sourceId} has invalid/missing data (${validation.missingFields.join(', ')}), triggering scrape`);
+      }
+      
+      // Construct product URL from sourceId
+      const productUrl = this.constructProductUrl(sourceId);
+      if (!productUrl) {
+        this.logger.error(`Cannot construct product URL for sourceId: ${sourceId}`);
+        return existingProduct || null;
+      }
+      
+      // Scrape fresh product data
+      const scrapedProduct = await this.scrapeProductDetail(productUrl);
+      if (scrapedProduct) {
+        this.logger.log(`Successfully scraped fresh data for product ${sourceId}`);
+        return scrapedProduct;
+      }
+      
+      this.logger.warn(`Failed to scrape fresh data for product ${sourceId}`);
+      return existingProduct || null;
+      
+    } catch (error) {
+      this.logger.error(`Error in scrapeProductWithFallback for ${sourceId}: ${error.message}`);
+      return existingProduct || null;
+    }
+  }
+
+  /**
+   * Construct product URL from sourceId
+   */
+  private constructProductUrl(sourceId: string): string | null {
+    try {
+      // Handle different sourceId formats
+      if (sourceId.startsWith('http')) {
+        return sourceId; // Already a full URL
+      }
+      
+      // For World of Books, construct URL from sourceId
+      // Example: sample-book-1 -> https://www.worldofbooks.com/en-gb/books/sample-book-1
+      const cleanSourceId = sourceId.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+      return `${this.baseUrl}/en-gb/books/${cleanSourceId}`;
+      
+    } catch (error) {
+      this.logger.error(`Error constructing product URL for ${sourceId}: ${error.message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Enhanced product scraping with image verification
+   */
+  async scrapeProductsWithImageVerification(url: string, maxPages: number = 10): Promise<ProductItem[]> {
+    const products = await this.scrapeProducts(url, maxPages);
+    
+    // Verify and fix images for all products
+    const verifiedProducts: ProductItem[] = [];
+    
+    for (const product of products) {
+      const validation = await this.validateProductData(product);
+      
+      if (!validation.isValid && validation.missingFields.includes('validImageUrl')) {
+        // Try to find alternative image or scrape product detail for better image
+        try {
+          const detailedProduct = await this.scrapeProductWithFallback(product.sourceId, product);
+          if (detailedProduct) {
+            verifiedProducts.push(detailedProduct);
+          } else {
+            verifiedProducts.push(product); // Keep original even if image is invalid
+          }
+        } catch (error) {
+          this.logger.warn(`Failed to get detailed product data for ${product.sourceId}: ${error.message}`);
+          verifiedProducts.push(product);
+        }
+      } else {
+        verifiedProducts.push(product);
+      }
+    }
+    
+    this.logger.log(`Verified ${verifiedProducts.length} products with image validation`);
+    return verifiedProducts;
   }
 
   private async checkRobotsTxt(url: string): Promise<boolean> {
