@@ -50,14 +50,20 @@ export class ScrapeJob {
   @Column({ name: 'started_at', type: 'timestamp', nullable: true })
   startedAt: Date;
 
-  @Column({ name: 'finished_at', type: 'timestamp', nullable: true })
-  finishedAt: Date;
+  @Column({ name: 'completed_at', type: 'timestamp', nullable: true })
+  completedAt: Date;
 
-  @Column({ name: 'error_log', type: 'text', nullable: true })
-  errorLog: string;
+  @Column({ name: 'error_message', type: 'text', nullable: true })
+  errorMessage: string;
 
-  @Column({ name: 'items_scraped', default: 0 })
-  itemsScraped: number;
+  @Column({ name: 'items_processed', default: 0 })
+  itemsProcessed: number;
+
+  @Column({ name: 'items_created', default: 0 })
+  itemsCreated: number;
+
+  @Column({ name: 'items_updated', default: 0 })
+  itemsUpdated: number;
 
   @Column({ name: 'retry_count', default: 0 })
   retryCount: number;

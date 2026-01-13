@@ -23,23 +23,23 @@ export class ScrapingProcessor {
     try {
       await this.scrapingService.updateJobStatus(jobId, ScrapeJobStatus.RUNNING);
 
-      let itemsScraped = 0;
+      let itemsProcessed = 0;
 
       switch (targetType) {
         case ScrapeJobType.NAVIGATION:
-          itemsScraped = await this.handleNavigationScrape(jobId, targetUrl, metadata);
+          itemsProcessed = await this.handleNavigationScrape(jobId, targetUrl, metadata);
           break;
 
         case ScrapeJobType.CATEGORY:
-          itemsScraped = await this.handleCategoryScrape(jobId, targetUrl, metadata);
+          itemsProcessed = await this.handleCategoryScrape(jobId, targetUrl, metadata);
           break;
 
         case ScrapeJobType.PRODUCT_LIST:
-          itemsScraped = await this.handleProductListScrape(jobId, targetUrl, metadata);
+          itemsProcessed = await this.handleProductListScrape(jobId, targetUrl, metadata);
           break;
 
         case ScrapeJobType.PRODUCT_DETAIL:
-          itemsScraped = await this.handleProductDetailScrape(jobId, targetUrl, metadata);
+          itemsProcessed = await this.handleProductDetailScrape(jobId, targetUrl, metadata);
           break;
 
         default:
@@ -50,10 +50,10 @@ export class ScrapingProcessor {
         jobId,
         ScrapeJobStatus.COMPLETED,
         null,
-        itemsScraped,
+        itemsProcessed,
       );
 
-      this.logger.log(`Completed scrape job ${jobId}: scraped ${itemsScraped} items`);
+      this.logger.log(`Completed scrape job ${jobId}: processed ${itemsProcessed} items`);
     } catch (error) {
       this.logger.error(`Failed scrape job ${jobId}: ${error.message}`, error.stack);
       

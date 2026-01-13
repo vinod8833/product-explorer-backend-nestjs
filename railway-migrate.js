@@ -1,9 +1,9 @@
-// Railway database migration script - TypeORM Compatible
+// Railway database migration script - TypeORM Entity Compatible v3
 const { Client } = require('pg');
 
 const DATABASE_URL = 'postgresql://postgres:PKzoOzvUtjJgxIzKpOoXALIIAfLuHWls@centerbeam.proxy.rlwy.net:13082/railway';
 
-console.log('🗄️ Railway Database Migration Script - TypeORM Compatible');
+console.log('🗄️ Railway Database Migration Script - TypeORM Entity Compatible v3');
 console.log('Connecting to Railway PostgreSQL...');
 
 async function runMigrations() {
@@ -25,7 +25,7 @@ async function runMigrations() {
     await client.query('DROP TYPE IF EXISTS "scrape_job_status_enum" CASCADE;');
     await client.query('DROP TYPE IF EXISTS "scrape_job_target_type_enum" CASCADE;');
     
-    console.log('🔧 Creating TypeORM-compatible schema...');
+    console.log('🔧 Creating TypeORM-entity-compatible schema...');
     
     // Create ENUM types
     await client.query(`
@@ -40,7 +40,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create navigation table (TypeORM format)
+    // Create navigation table (matching Navigation entity exactly)
     await client.query(`
       CREATE TABLE "navigation" (
         "id" SERIAL NOT NULL,
@@ -56,7 +56,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create category table (TypeORM format)
+    // Create category table (matching Category entity exactly)
     await client.query(`
       CREATE TABLE "category" (
         "id" SERIAL NOT NULL,
@@ -74,7 +74,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create product table (TypeORM format)
+    // Create product table (matching Product entity exactly)
     await client.query(`
       CREATE TABLE "product" (
         "id" SERIAL NOT NULL,
@@ -95,20 +95,20 @@ async function runMigrations() {
       )
     `);
 
-    // Create product_detail table (TypeORM format)
+    // Create product_detail table (matching ProductDetail entity exactly - FIXED COLUMN NAMES)
     await client.query(`
       CREATE TABLE "product_detail" (
         "id" SERIAL NOT NULL,
         "product_id" integer NOT NULL,
         "description" text,
         "specs" jsonb,
+        "ratings_avg" numeric(3,2),
+        "reviews_count" integer NOT NULL DEFAULT '0',
         "publisher" character varying(255),
         "publication_date" character varying(50),
         "isbn" character varying(50),
         "page_count" integer,
         "genres" text[],
-        "average_rating" numeric(3,2),
-        "review_count" integer NOT NULL DEFAULT '0',
         "created_at" TIMESTAMP NOT NULL DEFAULT now(),
         "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "REL_product_detail_product_id" UNIQUE ("product_id"),
@@ -116,7 +116,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create review table (TypeORM format)
+    // Create review table (matching Review entity exactly)
     await client.query(`
       CREATE TABLE "review" (
         "id" SERIAL NOT NULL,
@@ -132,7 +132,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create scrape_job table (TypeORM format)
+    // Create scrape_job table (matching ScrapeJob entity exactly - FIXED COLUMN NAMES)
     await client.query(`
       CREATE TABLE "scrape_job" (
         "id" SERIAL NOT NULL,
@@ -153,7 +153,7 @@ async function runMigrations() {
       )
     `);
 
-    // Create view_history table (TypeORM format)
+    // Create view_history table (matching ViewHistory entity exactly)
     await client.query(`
       CREATE TABLE "view_history" (
         "id" SERIAL NOT NULL,
@@ -249,6 +249,14 @@ async function runMigrations() {
       ('sample-book-3', 2, 'Sapiens', 'Yuval Noah Harari', 12.99, 'GBP', 'https://www.worldofbooks.com/en-gb/books/yuval-noah-harari/sapiens/9780062316097', true);
     `);
     
+    // Insert sample product details
+    await client.query(`
+      INSERT INTO "product_detail" ("product_id", "description", "ratings_avg", "reviews_count") VALUES
+      (1, 'A classic American novel set in the Jazz Age', 4.2, 150),
+      (2, 'A gripping tale of racial injustice and childhood innocence', 4.5, 200),
+      (3, 'A brief history of humankind from the Stone Age to the present', 4.3, 300);
+    `);
+    
     console.log('✅ Sample data inserted');
     
     // Create a migrations table to track that this migration was run
@@ -275,7 +283,7 @@ async function runMigrations() {
       ORDER BY table_name;
     `);
     
-    console.log('🎉 TypeORM-compatible migration complete!');
+    console.log('🎉 TypeORM-entity-compatible migration complete!');
     console.log('📊 Tables created:', finalResult.rows.map(row => row.table_name));
     
   } catch (error) {

@@ -1,5 +1,6 @@
-// Railway deployment server - Full NestJS Application with Scraping Integration v2.0
+// Railway deployment server - Full NestJS Application with Scraping Integration v2.1
 // This file starts the complete NestJS application with Swagger API docs and scraping endpoints
+// Updated: Fixed ScrapeJob entity column names to match database schema
 
 const path = require('path');
 const fs = require('fs');

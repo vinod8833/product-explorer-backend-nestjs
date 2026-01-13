@@ -33,13 +33,13 @@ export class ScrapeJobDto {
   startedAt?: Date;
 
   @ApiPropertyOptional({ description: 'Job completion timestamp' })
-  finishedAt?: Date;
+  completedAt?: Date;
 
-  @ApiPropertyOptional({ description: 'Error log if failed' })
-  errorLog?: string;
+  @ApiPropertyOptional({ description: 'Error message if failed' })
+  errorMessage?: string;
 
-  @ApiProperty({ description: 'Number of items scraped' })
-  itemsScraped: number;
+  @ApiProperty({ description: 'Number of items processed' })
+  itemsProcessed: number;
 
   @ApiProperty({ description: 'Number of retry attempts' })
   retryCount: number;

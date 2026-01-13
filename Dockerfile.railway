@@ -1,4 +1,5 @@
 # Multi-stage build for Railway deployment with full NestJS application and scraping
+# Updated: Fixed ScrapeJob entity column names to match database schema
 FROM node:20-alpine AS builder
 
 WORKDIR /app

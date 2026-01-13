@@ -1,6 +1,6 @@
 {
   "name": "product-explorer-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend API for Product Data Explorer",
   "author": "Product Explorer Team",
   "private": true,

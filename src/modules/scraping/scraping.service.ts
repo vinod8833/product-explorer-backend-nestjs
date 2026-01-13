@@ -67,8 +67,8 @@ export class ScrapingService {
   async updateJobStatus(
     id: number,
     status: ScrapeJobStatus,
-    errorLog?: string,
-    itemsScraped?: number,
+    errorMessage?: string,
+    itemsProcessed?: number,
   ): Promise<ScrapeJob> {
     const job = await this.scrapeJobRepository.findOne({ where: { id } });
     if (!job) {
@@ -76,15 +76,15 @@ export class ScrapingService {
     }
 
     job.status = status;
-    if (errorLog) job.errorLog = errorLog;
-    if (itemsScraped !== undefined) job.itemsScraped = itemsScraped;
+    if (errorLog) job.errorMessage = errorLog;
+    if (itemsScraped !== undefined) job.itemsProcessed = itemsScraped;
 
     if (status === ScrapeJobStatus.RUNNING && !job.startedAt) {
       job.startedAt = new Date();
     }
 
     if (status === ScrapeJobStatus.COMPLETED || status === ScrapeJobStatus.FAILED) {
-      job.finishedAt = new Date();
+      job.completedAt = new Date();
     }
 
     return this.scrapeJobRepository.save(job);
@@ -107,12 +107,12 @@ export class ScrapingService {
 
     const totalItemsResult = await this.scrapeJobRepository
       .createQueryBuilder('job')
-      .select('SUM(job.itemsScraped)', 'total')
+      .select('SUM(job.itemsProcessed)', 'total')
       .getRawOne();
 
     const lastScrapeResult = await this.scrapeJobRepository.findOne({
       where: { status: ScrapeJobStatus.COMPLETED },
-      order: { finishedAt: 'DESC' },
+      order: { completedAt: 'DESC' },
     });
 
     return {
@@ -122,7 +122,7 @@ export class ScrapingService {
       completedJobs,
       failedJobs,
       totalItemsScraped: parseInt(totalItemsResult?.total || '0', 10),
-      lastScrapeAt: lastScrapeResult?.finishedAt,
+      lastScrapeAt: lastScrapeResult?.completedAt,
     };
   }
 
