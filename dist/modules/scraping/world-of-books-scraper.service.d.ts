@@ -56,7 +56,11 @@ export declare class WorldOfBooksScraperService {
         missingFields: string[];
     }>;
     scrapeProductWithFallback(sourceId: string, existingProduct?: ProductItem): Promise<ProductItem | null>;
+    private searchAndScrapeProduct;
+    private getMockImageUrl;
     private constructProductUrl;
+    scrapeOrGenerateImageUrl(product: ProductItem): Promise<string | null>;
+    private generatePlaceholderImageUrl;
     scrapeProductsWithImageVerification(url: string, maxPages?: number): Promise<ProductItem[]>;
     private checkRobotsTxt;
     private createCrawlerConfig;
@@ -67,4 +71,5 @@ export declare class WorldOfBooksScraperService {
     scrapeCategories(navigationUrl: string, maxDepth?: number): Promise<CategoryItem[]>;
     scrapeProducts(categoryUrl: string, maxPages?: number): Promise<ProductItem[]>;
     scrapeProductDetail(productUrl: string): Promise<ProductDetailItem>;
+    batchUpdateMissingImages(products: ProductItem[]): Promise<ProductItem[]>;
 }

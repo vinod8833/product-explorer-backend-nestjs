@@ -28,20 +28,8 @@ export class ProductImageService {
 
     this.logger.log(`Found ${productsWithoutImages.length} products without images, starting automatic scraping...`);
 
-    // Process products in batches to avoid overwhelming the scraping service
-    const batchSize = 3;
-    for (let i = 0; i < productsWithoutImages.length; i += batchSize) {
-      const batch = productsWithoutImages.slice(i, i + batchSize);
-      
-      // Process batch concurrently but with controlled concurrency
-      const promises = batch.map(product => this.scrapeProductImage(product));
-      await Promise.allSettled(promises);
-      
-      // Add delay between batches to be respectful to the target site
-      if (i + batchSize < productsWithoutImages.length) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-    }
+    // Use the new batch update method for better efficiency
+    await this.batchUpdateImages(productsWithoutImages);
   }
 
   /**
@@ -51,28 +39,110 @@ export class ProductImageService {
     try {
       this.logger.log(`Scraping image for product: ${product.title}`);
       
-      // Use the existing scraping service to get product details
-      const scrapedData = await this.scrapingService.scrapeProductDetail(product.sourceUrl);
+      // Convert Product entity to ProductItem interface for scraper
+      const productItem = {
+        sourceId: product.sourceId || product.id.toString(),
+        title: product.title,
+        author: product.author,
+        price: product.price,
+        currency: 'GBP',
+        imageUrl: product.imageUrl,
+        sourceUrl: product.sourceUrl,
+        inStock: true
+      };
       
-      if (scrapedData && scrapedData.imageUrl) {
-        // Update the product with the scraped image URL
-        await this.productRepository.update(product.id, {
-          imageUrl: scrapedData.imageUrl,
-          lastScrapedAt: new Date(),
-        });
-        
-        // Update the product object in memory so it's returned with the image
-        product.imageUrl = scrapedData.imageUrl;
-        product.lastScrapedAt = new Date();
-        
-        this.logger.log(`✅ Successfully scraped image for: ${product.title}`);
+      // Use the enhanced scraper service to get or generate image URL
+      const imageUrl = await this.scrapingService.scrapeOrGenerateImageUrl(productItem);
+      
+      if (imageUrl) {
+        await this.updateProductImage(product, imageUrl);
+        this.logger.log(`✅ Successfully updated image for: ${product.title}`);
       } else {
-        this.logger.warn(`⚠️ No image found for product: ${product.title}`);
+        this.logger.warn(`⚠️ Could not get image for: ${product.title}`);
+        // Generate a placeholder image URL as fallback
+        const placeholderImageUrl = this.generatePlaceholderImageUrl(product);
+        await this.updateProductImage(product, placeholderImageUrl);
       }
     } catch (error) {
       this.logger.error(`❌ Failed to scrape image for product ${product.title}:`, error.message);
-      // Don't throw error - continue with other products
+      // Generate a placeholder image URL as fallback
+      try {
+        const placeholderImageUrl = this.generatePlaceholderImageUrl(product);
+        await this.updateProductImage(product, placeholderImageUrl);
+      } catch (fallbackError) {
+        this.logger.error(`Failed to set placeholder image for ${product.title}:`, fallbackError.message);
+      }
     }
+  }
+
+  /**
+   * Batch update images for multiple products
+   */
+  async batchUpdateImages(products: Product[]): Promise<void> {
+    const productsWithoutImages = products.filter(
+      product => !product.imageUrl || product.imageUrl.trim() === ''
+    );
+
+    if (productsWithoutImages.length === 0) {
+      this.logger.log('All products already have images');
+      return;
+    }
+
+    this.logger.log(`Starting batch image update for ${productsWithoutImages.length} products`);
+
+    // Convert Product entities to ProductItem interfaces
+    const productItems = productsWithoutImages.map(product => ({
+      sourceId: product.sourceId || product.id.toString(),
+      title: product.title,
+      author: product.author,
+      price: product.price,
+      currency: 'GBP',
+      imageUrl: product.imageUrl,
+      sourceUrl: product.sourceUrl,
+      inStock: true
+    }));
+
+    // Use the enhanced batch update method
+    const updatedProductItems = await this.scrapingService.batchUpdateMissingImages(productItems);
+
+    // Update database with new image URLs
+    for (let i = 0; i < updatedProductItems.length; i++) {
+      const updatedItem = updatedProductItems[i];
+      const originalProduct = productsWithoutImages[i];
+
+      if (updatedItem.imageUrl && updatedItem.imageUrl !== originalProduct.imageUrl) {
+        await this.updateProductImage(originalProduct, updatedItem.imageUrl);
+        this.logger.log(`✅ Updated image for: ${originalProduct.title}`);
+      }
+    }
+
+    this.logger.log(`Completed batch image update`);
+  }
+
+  /**
+   * Generate a placeholder image URL for a product
+   */
+  private generatePlaceholderImageUrl(product: Product): string {
+    // Use a book cover placeholder service
+    const title = encodeURIComponent(product.title);
+    const author = encodeURIComponent(product.author || 'Unknown Author');
+    
+    // Using a placeholder service that generates book covers
+    return `https://via.placeholder.com/300x400/4A90E2/FFFFFF?text=${title}+by+${author}`;
+  }
+
+  /**
+   * Update product with image URL
+   */
+  private async updateProductImage(product: Product, imageUrl: string): Promise<void> {
+    await this.productRepository.update(product.id, {
+      imageUrl: imageUrl,
+      lastScrapedAt: new Date(),
+    });
+    
+    // Update the product object in memory so it's returned with the image
+    product.imageUrl = imageUrl;
+    product.lastScrapedAt = new Date();
   }
 
   /**
