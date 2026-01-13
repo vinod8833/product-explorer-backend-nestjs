@@ -6,6 +6,7 @@ import { ScrapingService } from './scraping.service';
 import { WorldOfBooksScraperService } from './world-of-books-scraper.service';
 import { WorldOfBooksApiService } from './world-of-books-api.service';
 import { WorldOfBooksEnhancedService } from './world-of-books-enhanced.service';
+import { StartupScrapingService } from './startup-scraping.service';
 import { ScrapingProcessor } from './scraping.processor';
 import { ScrapeJob } from '../../database/entities/scrape-job.entity';
 import { Navigation } from '../../database/entities/navigation.entity';
@@ -34,13 +35,15 @@ import { Review } from '../../database/entities/review.entity';
     WorldOfBooksScraperService, 
     WorldOfBooksApiService,
     WorldOfBooksEnhancedService,
+    StartupScrapingService,
     ScrapingProcessor
   ],
   exports: [
     ScrapingService, 
     WorldOfBooksScraperService, 
     WorldOfBooksApiService,
-    WorldOfBooksEnhancedService
+    WorldOfBooksEnhancedService,
+    StartupScrapingService
   ],
 })
 export class ScrapingModule {}

@@ -185,6 +185,19 @@ export class ScrapingService {
     return savedItems;
   }
 
+  async findAllNavigationItems(): Promise<Navigation[]> {
+    return this.navigationRepository.find({
+      order: { createdAt: 'DESC' }
+    });
+  }
+
+  async findAllCategories(): Promise<Category[]> {
+    return this.categoryRepository.find({
+      relations: ['navigation'],
+      order: { createdAt: 'DESC' }
+    });
+  }
+
   async saveCategoryItems(items: any[], navigationId?: number, parentId?: number): Promise<Category[]> {
     const savedItems: Category[] = [];
     

@@ -28,6 +28,8 @@ export declare class ScrapingService {
     triggerProductListScrape(productListUrl: string, categoryId?: number, maxPages?: number): Promise<ScrapeJob>;
     triggerProductDetailScrape(productUrl: string, productId?: number): Promise<ScrapeJob>;
     saveNavigationItems(items: any[]): Promise<Navigation[]>;
+    findAllNavigationItems(): Promise<Navigation[]>;
+    findAllCategories(): Promise<Category[]>;
     saveCategoryItems(items: any[], navigationId?: number, parentId?: number): Promise<Category[]>;
     saveProductItems(items: any[], categoryId?: number): Promise<Product[]>;
     saveProductDetail(item: any, productId?: number): Promise<Product>;

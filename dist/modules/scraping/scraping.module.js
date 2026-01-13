@@ -15,6 +15,7 @@ const scraping_service_1 = require("./scraping.service");
 const world_of_books_scraper_service_1 = require("./world-of-books-scraper.service");
 const world_of_books_api_service_1 = require("./world-of-books-api.service");
 const world_of_books_enhanced_service_1 = require("./world-of-books-enhanced.service");
+const startup_scraping_service_1 = require("./startup-scraping.service");
 const scraping_processor_1 = require("./scraping.processor");
 const scrape_job_entity_1 = require("../../database/entities/scrape-job.entity");
 const navigation_entity_1 = require("../../database/entities/navigation.entity");
@@ -46,13 +47,15 @@ exports.ScrapingModule = ScrapingModule = __decorate([
             world_of_books_scraper_service_1.WorldOfBooksScraperService,
             world_of_books_api_service_1.WorldOfBooksApiService,
             world_of_books_enhanced_service_1.WorldOfBooksEnhancedService,
+            startup_scraping_service_1.StartupScrapingService,
             scraping_processor_1.ScrapingProcessor
         ],
         exports: [
             scraping_service_1.ScrapingService,
             world_of_books_scraper_service_1.WorldOfBooksScraperService,
             world_of_books_api_service_1.WorldOfBooksApiService,
-            world_of_books_enhanced_service_1.WorldOfBooksEnhancedService
+            world_of_books_enhanced_service_1.WorldOfBooksEnhancedService,
+            startup_scraping_service_1.StartupScrapingService
         ],
     })
 ], ScrapingModule);

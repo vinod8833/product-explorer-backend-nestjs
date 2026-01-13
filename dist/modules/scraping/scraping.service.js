@@ -163,6 +163,17 @@ let ScrapingService = ScrapingService_1 = class ScrapingService {
         }
         return savedItems;
     }
+    async findAllNavigationItems() {
+        return this.navigationRepository.find({
+            order: { createdAt: 'DESC' }
+        });
+    }
+    async findAllCategories() {
+        return this.categoryRepository.find({
+            relations: ['navigation'],
+            order: { createdAt: 'DESC' }
+        });
+    }
     async saveCategoryItems(items, navigationId, parentId) {
         const savedItems = [];
         for (const item of items) {
