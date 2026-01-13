@@ -53,15 +53,15 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ description: 'Job completion timestamp' }),
     __metadata("design:type", Date)
-], ScrapeJobDto.prototype, "finishedAt", void 0);
+], ScrapeJobDto.prototype, "completedAt", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Error log if failed' }),
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Error message if failed' }),
     __metadata("design:type", String)
-], ScrapeJobDto.prototype, "errorLog", void 0);
+], ScrapeJobDto.prototype, "errorMessage", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Number of items scraped' }),
+    (0, swagger_1.ApiProperty)({ description: 'Number of items processed' }),
     __metadata("design:type", Number)
-], ScrapeJobDto.prototype, "itemsScraped", void 0);
+], ScrapeJobDto.prototype, "itemsProcessed", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Number of retry attempts' }),
     __metadata("design:type", Number)

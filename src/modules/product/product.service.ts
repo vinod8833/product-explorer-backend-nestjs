@@ -6,6 +6,7 @@ import { ProductDetail } from '../../database/entities/product-detail.entity';
 import { Review } from '../../database/entities/review.entity';
 import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/product.dto';
 import { PaginationDto, PaginatedResponseDto } from '../../common/dto/pagination.dto';
+import { ProductImageService } from './product-image.service';
 
 @Injectable()
 export class ProductService {
@@ -16,6 +17,7 @@ export class ProductService {
     private productDetailRepository: Repository<ProductDetail>,
     @InjectRepository(Review)
     private reviewRepository: Repository<Review>,
+    private productImageService: ProductImageService,
   ) {}
 
   async findAll(
@@ -31,6 +33,9 @@ export class ProductService {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+
+    // Check for missing images and scrape them automatically
+    await this.productImageService.handleMissingImages(products);
 
     return new PaginatedResponseDto(products, total, page, limit);
   }
@@ -49,6 +54,9 @@ export class ProductService {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+
+    // Check for missing images and scrape them automatically
+    await this.productImageService.handleMissingImages(products);
 
     return new PaginatedResponseDto(products, total, page, limit);
   }
@@ -152,6 +160,9 @@ export class ProductService {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+
+    // Check for missing images and scrape them automatically
+    await this.productImageService.handleMissingImages(products);
 
     return new PaginatedResponseDto(products, total, page, limit);
   }

@@ -61,21 +61,21 @@ let ScrapingService = ScrapingService_1 = class ScrapingService {
     async findJobById(id) {
         return this.scrapeJobRepository.findOne({ where: { id } });
     }
-    async updateJobStatus(id, status, errorLog, itemsScraped) {
+    async updateJobStatus(id, status, errorMessage, itemsProcessed) {
         const job = await this.scrapeJobRepository.findOne({ where: { id } });
         if (!job) {
             throw new Error(`Scrape job ${id} not found`);
         }
         job.status = status;
-        if (errorLog)
-            job.errorLog = errorLog;
-        if (itemsScraped !== undefined)
-            job.itemsScraped = itemsScraped;
+        if (errorMessage)
+            job.errorMessage = errorMessage;
+        if (itemsProcessed !== undefined)
+            job.itemsProcessed = itemsProcessed;
         if (status === scrape_job_entity_1.ScrapeJobStatus.RUNNING && !job.startedAt) {
             job.startedAt = new Date();
         }
         if (status === scrape_job_entity_1.ScrapeJobStatus.COMPLETED || status === scrape_job_entity_1.ScrapeJobStatus.FAILED) {
-            job.finishedAt = new Date();
+            job.completedAt = new Date();
         }
         return this.scrapeJobRepository.save(job);
     }
@@ -95,11 +95,11 @@ let ScrapingService = ScrapingService_1 = class ScrapingService {
         });
         const totalItemsResult = await this.scrapeJobRepository
             .createQueryBuilder('job')
-            .select('SUM(job.itemsScraped)', 'total')
+            .select('SUM(job.itemsProcessed)', 'total')
             .getRawOne();
         const lastScrapeResult = await this.scrapeJobRepository.findOne({
             where: { status: scrape_job_entity_1.ScrapeJobStatus.COMPLETED },
-            order: { finishedAt: 'DESC' },
+            order: { completedAt: 'DESC' },
         });
         return {
             totalJobs,
@@ -108,7 +108,7 @@ let ScrapingService = ScrapingService_1 = class ScrapingService {
             completedJobs,
             failedJobs,
             totalItemsScraped: parseInt(totalItemsResult?.total || '0', 10),
-            lastScrapeAt: lastScrapeResult?.finishedAt,
+            lastScrapeAt: lastScrapeResult?.completedAt,
         };
     }
     async triggerNavigationScrape(baseUrl) {

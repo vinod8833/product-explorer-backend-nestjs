@@ -27,25 +27,25 @@ let ScrapingProcessor = ScrapingProcessor_1 = class ScrapingProcessor {
         this.logger.log(`Processing scrape job ${jobId}: ${targetType} - ${targetUrl}`);
         try {
             await this.scrapingService.updateJobStatus(jobId, scrape_job_entity_1.ScrapeJobStatus.RUNNING);
-            let itemsScraped = 0;
+            let itemsProcessed = 0;
             switch (targetType) {
                 case scrape_job_entity_1.ScrapeJobType.NAVIGATION:
-                    itemsScraped = await this.handleNavigationScrape(jobId, targetUrl, metadata);
+                    itemsProcessed = await this.handleNavigationScrape(jobId, targetUrl, metadata);
                     break;
                 case scrape_job_entity_1.ScrapeJobType.CATEGORY:
-                    itemsScraped = await this.handleCategoryScrape(jobId, targetUrl, metadata);
+                    itemsProcessed = await this.handleCategoryScrape(jobId, targetUrl, metadata);
                     break;
                 case scrape_job_entity_1.ScrapeJobType.PRODUCT_LIST:
-                    itemsScraped = await this.handleProductListScrape(jobId, targetUrl, metadata);
+                    itemsProcessed = await this.handleProductListScrape(jobId, targetUrl, metadata);
                     break;
                 case scrape_job_entity_1.ScrapeJobType.PRODUCT_DETAIL:
-                    itemsScraped = await this.handleProductDetailScrape(jobId, targetUrl, metadata);
+                    itemsProcessed = await this.handleProductDetailScrape(jobId, targetUrl, metadata);
                     break;
                 default:
                     throw new Error(`Unknown scrape job type: ${targetType}`);
             }
-            await this.scrapingService.updateJobStatus(jobId, scrape_job_entity_1.ScrapeJobStatus.COMPLETED, null, itemsScraped);
-            this.logger.log(`Completed scrape job ${jobId}: scraped ${itemsScraped} items`);
+            await this.scrapingService.updateJobStatus(jobId, scrape_job_entity_1.ScrapeJobStatus.COMPLETED, null, itemsProcessed);
+            this.logger.log(`Completed scrape job ${jobId}: processed ${itemsProcessed} items`);
         }
         catch (error) {
             this.logger.error(`Failed scrape job ${jobId}: ${error.message}`, error.stack);

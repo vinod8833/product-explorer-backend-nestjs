@@ -44,6 +44,7 @@
     "@nestjs/swagger": "^7.1.17",
     "@nestjs/throttler": "^5.0.1",
     "@nestjs/typeorm": "^10.0.1",
+    "axios": "^1.13.2",
     "bull": "^4.12.2",
     "cache-manager": "^5.2.4",
     "cache-manager-redis-store": "^3.0.1",

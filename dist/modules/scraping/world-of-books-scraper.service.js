@@ -16,6 +16,7 @@ const config_1 = require("@nestjs/config");
 const crawlee_1 = require("crawlee");
 const custom_exceptions_1 = require("../../common/exceptions/custom-exceptions");
 const sanitization_util_1 = require("../../common/utils/sanitization.util");
+const axios_1 = require("axios");
 let WorldOfBooksScraperService = WorldOfBooksScraperService_1 = class WorldOfBooksScraperService {
     constructor(configService) {
         this.configService = configService;
@@ -28,6 +29,118 @@ let WorldOfBooksScraperService = WorldOfBooksScraperService_1 = class WorldOfBoo
         this.timeout = this.configService.get('SCRAPING_TIMEOUT', 30000);
         this.respectRobotsTxt = this.configService.get('SCRAPING_RESPECT_ROBOTS', true);
         this.proxyUrls = this.configService.get('SCRAPING_PROXY_URLS', '').split(',').filter(Boolean);
+    }
+    async verifyImageUrl(imageUrl) {
+        if (!imageUrl)
+            return false;
+        try {
+            const response = await axios_1.default.head(imageUrl, {
+                timeout: 5000,
+                headers: {
+                    'User-Agent': this.userAgent
+                }
+            });
+            const contentType = response.headers['content-type'];
+            const isValidImage = contentType && contentType.startsWith('image/');
+            const isValidStatus = response.status >= 200 && response.status < 300;
+            this.logger.debug(`Image verification for ${imageUrl}: ${isValidImage && isValidStatus ? 'VALID' : 'INVALID'}`);
+            return isValidImage && isValidStatus;
+        }
+        catch (error) {
+            this.logger.warn(`Image verification failed for ${imageUrl}: ${error.message}`);
+            return false;
+        }
+    }
+    async validateProductData(product) {
+        const missingFields = [];
+        if (!product.title)
+            missingFields.push('title');
+        if (!product.author)
+            missingFields.push('author');
+        if (!product.price)
+            missingFields.push('price');
+        if (!product.sourceUrl)
+            missingFields.push('sourceUrl');
+        if (!product.imageUrl) {
+            missingFields.push('imageUrl');
+        }
+        else {
+            const isImageValid = await this.verifyImageUrl(product.imageUrl);
+            if (!isImageValid) {
+                missingFields.push('validImageUrl');
+            }
+        }
+        const isValid = missingFields.length === 0;
+        this.logger.debug(`Product validation for ${product.sourceId}: ${isValid ? 'VALID' : 'INVALID'} (missing: ${missingFields.join(', ')})`);
+        return { isValid, missingFields };
+    }
+    async scrapeProductWithFallback(sourceId, existingProduct) {
+        try {
+            if (existingProduct) {
+                const validation = await this.validateProductData(existingProduct);
+                if (validation.isValid) {
+                    this.logger.debug(`Product ${sourceId} has valid data, no scraping needed`);
+                    return existingProduct;
+                }
+                this.logger.log(`Product ${sourceId} has invalid/missing data (${validation.missingFields.join(', ')}), triggering scrape`);
+            }
+            const productUrl = this.constructProductUrl(sourceId);
+            if (!productUrl) {
+                this.logger.error(`Cannot construct product URL for sourceId: ${sourceId}`);
+                return existingProduct || null;
+            }
+            const scrapedProduct = await this.scrapeProductDetail(productUrl);
+            if (scrapedProduct) {
+                this.logger.log(`Successfully scraped fresh data for product ${sourceId}`);
+                return scrapedProduct;
+            }
+            this.logger.warn(`Failed to scrape fresh data for product ${sourceId}`);
+            return existingProduct || null;
+        }
+        catch (error) {
+            this.logger.error(`Error in scrapeProductWithFallback for ${sourceId}: ${error.message}`);
+            return existingProduct || null;
+        }
+    }
+    constructProductUrl(sourceId) {
+        try {
+            if (sourceId.startsWith('http')) {
+                return sourceId;
+            }
+            const cleanSourceId = sourceId.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+            return `${this.baseUrl}/en-gb/books/${cleanSourceId}`;
+        }
+        catch (error) {
+            this.logger.error(`Error constructing product URL for ${sourceId}: ${error.message}`);
+            return null;
+        }
+    }
+    async scrapeProductsWithImageVerification(url, maxPages = 10) {
+        const products = await this.scrapeProducts(url, maxPages);
+        const verifiedProducts = [];
+        for (const product of products) {
+            const validation = await this.validateProductData(product);
+            if (!validation.isValid && validation.missingFields.includes('validImageUrl')) {
+                try {
+                    const detailedProduct = await this.scrapeProductWithFallback(product.sourceId, product);
+                    if (detailedProduct) {
+                        verifiedProducts.push(detailedProduct);
+                    }
+                    else {
+                        verifiedProducts.push(product);
+                    }
+                }
+                catch (error) {
+                    this.logger.warn(`Failed to get detailed product data for ${product.sourceId}: ${error.message}`);
+                    verifiedProducts.push(product);
+                }
+            }
+            else {
+                verifiedProducts.push(product);
+            }
+        }
+        this.logger.log(`Verified ${verifiedProducts.length} products with image validation`);
+        return verifiedProducts;
     }
     async checkRobotsTxt(url) {
         if (!this.respectRobotsTxt)

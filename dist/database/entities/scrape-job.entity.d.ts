@@ -17,9 +17,11 @@ export declare class ScrapeJob {
     targetType: ScrapeJobType;
     status: ScrapeJobStatus;
     startedAt: Date;
-    finishedAt: Date;
-    errorLog: string;
-    itemsScraped: number;
+    completedAt: Date;
+    errorMessage: string;
+    itemsProcessed: number;
+    itemsCreated: number;
+    itemsUpdated: number;
     retryCount: number;
     metadata: Record<string, any>;
     createdAt: Date;

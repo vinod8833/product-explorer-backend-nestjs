@@ -50,6 +50,14 @@ export declare class WorldOfBooksScraperService {
     private readonly respectRobotsTxt;
     private readonly proxyUrls;
     constructor(configService: ConfigService);
+    verifyImageUrl(imageUrl: string): Promise<boolean>;
+    validateProductData(product: ProductItem): Promise<{
+        isValid: boolean;
+        missingFields: string[];
+    }>;
+    scrapeProductWithFallback(sourceId: string, existingProduct?: ProductItem): Promise<ProductItem | null>;
+    private constructProductUrl;
+    scrapeProductsWithImageVerification(url: string, maxPages?: number): Promise<ProductItem[]>;
     private checkRobotsTxt;
     private createCrawlerConfig;
     private randomDelay;

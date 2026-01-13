@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const product_controller_1 = require("./product.controller");
 const product_service_1 = require("./product.service");
+const product_image_service_1 = require("./product-image.service");
+const enhanced_product_controller_1 = require("./enhanced-product.controller");
 const product_entity_1 = require("../../database/entities/product.entity");
 const product_detail_entity_1 = require("../../database/entities/product-detail.entity");
 const review_entity_1 = require("../../database/entities/review.entity");
@@ -24,9 +26,9 @@ exports.ProductModule = ProductModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([product_entity_1.Product, product_detail_entity_1.ProductDetail, review_entity_1.Review]),
             scraping_module_1.ScrapingModule,
         ],
-        controllers: [product_controller_1.ProductController],
-        providers: [product_service_1.ProductService],
-        exports: [product_service_1.ProductService],
+        controllers: [product_controller_1.ProductController, enhanced_product_controller_1.EnhancedProductController],
+        providers: [product_service_1.ProductService, product_image_service_1.ProductImageService],
+        exports: [product_service_1.ProductService, product_image_service_1.ProductImageService],
     })
 ], ProductModule);
 //# sourceMappingURL=product.module.js.map

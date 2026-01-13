@@ -4,11 +4,13 @@ import { ProductDetail } from '../../database/entities/product-detail.entity';
 import { Review } from '../../database/entities/review.entity';
 import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/product.dto';
 import { PaginationDto, PaginatedResponseDto } from '../../common/dto/pagination.dto';
+import { ProductImageService } from './product-image.service';
 export declare class ProductService {
     private productRepository;
     private productDetailRepository;
     private reviewRepository;
-    constructor(productRepository: Repository<Product>, productDetailRepository: Repository<ProductDetail>, reviewRepository: Repository<Review>);
+    private productImageService;
+    constructor(productRepository: Repository<Product>, productDetailRepository: Repository<ProductDetail>, reviewRepository: Repository<Review>, productImageService: ProductImageService);
     findAll(paginationDto: PaginationDto, searchDto?: ProductQueryDto): Promise<PaginatedResponseDto<Product>>;
     findByCategory(categoryId: number, paginationDto: PaginationDto, searchDto?: ProductQueryDto): Promise<PaginatedResponseDto<Product>>;
     findOne(id: number): Promise<Product>;

@@ -20,11 +20,13 @@ const product_entity_1 = require("../../database/entities/product.entity");
 const product_detail_entity_1 = require("../../database/entities/product-detail.entity");
 const review_entity_1 = require("../../database/entities/review.entity");
 const pagination_dto_1 = require("../../common/dto/pagination.dto");
+const product_image_service_1 = require("./product-image.service");
 let ProductService = class ProductService {
-    constructor(productRepository, productDetailRepository, reviewRepository) {
+    constructor(productRepository, productDetailRepository, reviewRepository, productImageService) {
         this.productRepository = productRepository;
         this.productDetailRepository = productDetailRepository;
         this.reviewRepository = reviewRepository;
+        this.productImageService = productImageService;
     }
     async findAll(paginationDto, searchDto = {}) {
         const { page, limit } = paginationDto;
@@ -34,6 +36,7 @@ let ProductService = class ProductService {
             .skip(skip)
             .take(limit)
             .getManyAndCount();
+        await this.productImageService.handleMissingImages(products);
         return new pagination_dto_1.PaginatedResponseDto(products, total, page, limit);
     }
     async findByCategory(categoryId, paginationDto, searchDto = {}) {
@@ -44,6 +47,7 @@ let ProductService = class ProductService {
             .skip(skip)
             .take(limit)
             .getManyAndCount();
+        await this.productImageService.handleMissingImages(products);
         return new pagination_dto_1.PaginatedResponseDto(products, total, page, limit);
     }
     async findOne(id) {
@@ -124,6 +128,7 @@ let ProductService = class ProductService {
             .skip(skip)
             .take(limit)
             .getManyAndCount();
+        await this.productImageService.handleMissingImages(products);
         return new pagination_dto_1.PaginatedResponseDto(products, total, page, limit);
     }
     buildSearchQuery(searchDto) {
@@ -337,6 +342,7 @@ exports.ProductService = ProductService = __decorate([
     __param(2, (0, typeorm_1.InjectRepository)(review_entity_1.Review)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        product_image_service_1.ProductImageService])
 ], ProductService);
 //# sourceMappingURL=product.service.js.map

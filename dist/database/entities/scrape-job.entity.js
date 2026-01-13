@@ -58,17 +58,25 @@ __decorate([
     __metadata("design:type", Date)
 ], ScrapeJob.prototype, "startedAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'finished_at', type: 'timestamp', nullable: true }),
+    (0, typeorm_1.Column)({ name: 'completed_at', type: 'timestamp', nullable: true }),
     __metadata("design:type", Date)
-], ScrapeJob.prototype, "finishedAt", void 0);
+], ScrapeJob.prototype, "completedAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'error_log', type: 'text', nullable: true }),
+    (0, typeorm_1.Column)({ name: 'error_message', type: 'text', nullable: true }),
     __metadata("design:type", String)
-], ScrapeJob.prototype, "errorLog", void 0);
+], ScrapeJob.prototype, "errorMessage", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'items_scraped', default: 0 }),
+    (0, typeorm_1.Column)({ name: 'items_processed', default: 0 }),
     __metadata("design:type", Number)
-], ScrapeJob.prototype, "itemsScraped", void 0);
+], ScrapeJob.prototype, "itemsProcessed", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'items_created', default: 0 }),
+    __metadata("design:type", Number)
+], ScrapeJob.prototype, "itemsCreated", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'items_updated', default: 0 }),
+    __metadata("design:type", Number)
+], ScrapeJob.prototype, "itemsUpdated", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'retry_count', default: 0 }),
     __metadata("design:type", Number)

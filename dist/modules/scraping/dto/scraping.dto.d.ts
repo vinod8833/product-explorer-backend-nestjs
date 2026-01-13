@@ -17,9 +17,9 @@ export declare class ScrapeJobDto {
     targetType: ScrapeJobType;
     status: ScrapeJobStatus;
     startedAt?: Date;
-    finishedAt?: Date;
-    errorLog?: string;
-    itemsScraped: number;
+    completedAt?: Date;
+    errorMessage?: string;
+    itemsProcessed: number;
     retryCount: number;
     metadata?: Record<string, any>;
     createdAt: Date;

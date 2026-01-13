@@ -21,7 +21,7 @@ export declare class ScrapingService {
     createScrapeJob(createScrapeJobDto: CreateScrapeJobDto): Promise<ScrapeJob>;
     findAllJobs(paginationDto: PaginationDto): Promise<PaginatedResponseDto<ScrapeJob>>;
     findJobById(id: number): Promise<ScrapeJob>;
-    updateJobStatus(id: number, status: ScrapeJobStatus, errorLog?: string, itemsScraped?: number): Promise<ScrapeJob>;
+    updateJobStatus(id: number, status: ScrapeJobStatus, errorMessage?: string, itemsProcessed?: number): Promise<ScrapeJob>;
     getStats(): Promise<ScrapeStatsDto>;
     triggerNavigationScrape(baseUrl: string): Promise<ScrapeJob>;
     triggerCategoryScrape(categoryUrl: string, navigationId?: number, parentId?: number): Promise<ScrapeJob>;
