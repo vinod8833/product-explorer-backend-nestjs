@@ -6,7 +6,7 @@ const fs = require('fs');
 const express = require('express');
 const { Client } = require('pg');
 
-console.log('🚀 Starting Railway Production Server - Full NestJS Application with Scraping...');
+console.log('🚀 Starting Railway Production Server - Full NestJS Application with Scraping v2.1...');
 console.log('Working directory:', process.cwd());
 console.log('Node.js version:', process.version);
 console.log('Environment:', process.env.NODE_ENV);
